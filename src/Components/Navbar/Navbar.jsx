@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
 import { ValueContext } from "../../Context/ValueContext";
 
-
 const Navbar = () => {
   const { currentuser, signout } = useContext(ValueContext);
   console.log(currentuser);
@@ -78,7 +77,7 @@ const Navbar = () => {
               <div>
                 <p className="text-lg xl:text-2xl font-bold -ml-2 text-[#0096db]">
                   Parcel
-                  <span className="text-orange-400">Pilot</span>
+                  <span className="text-[#f77b33]">Pilot</span>
                 </p>
               </div>
             </div>
@@ -141,13 +140,21 @@ const Navbar = () => {
               className="tooltip  tooltip-bottom cursor-pointer"
               data-tip={currentuser.displayName}
             >
-              <img src={currentuser.photoURL} className="w-8 h-8 mr-1 rounded-4xl"></img>
+              <img
+                src={currentuser.photoURL}
+                className="w-8 h-8 mr-1 rounded-4xl"
+              ></img>
             </div>
           ) : (
-            <img
-              src="https://i.postimg.cc/xCXgGNKq/image.png"
-              className="w-8 h-8 mr-1"
-            ></img>
+            <div
+              className="tooltip  tooltip-bottom cursor-pointer"
+              data-tip="Guest"
+            >
+              <img
+                src="https://i.postimg.cc/xCXgGNKq/image.png"
+                className=" w-8 h-8 mr-1"
+              ></img>
+            </div>
           )}
 
           {currentuser ? (
@@ -161,11 +168,11 @@ const Navbar = () => {
             <div className="flex">
               <Link to="/authentication">
                 {" "}
-                <button className="btn btn-info xl:mx-2">Login</button>
+                <button className="btn  bg-[#0096db] xl:mx-2">Login</button>
               </Link>
               <Link to="register">
                 {" "}
-                <button className="btn btn-success xl:block hidden">
+                <button className="btn bg-[#f77b33] xl:block hidden">
                   Register
                 </button>
               </Link>
