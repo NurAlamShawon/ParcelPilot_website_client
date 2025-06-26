@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
-import { ValueContext } from "../Context/ValueContext";
+import { ValueContext } from "../../Context/ValueContext";
+
 
 const Navbar = () => {
   const { currentuser, signout } = useContext(ValueContext);
@@ -70,14 +71,14 @@ const Navbar = () => {
             {" "}
             <div className="flex items-center">
               <img
-                src="https://i.postimg.cc/PxTYJsNK/image.png"
+                src="https://i.postimg.cc/C588y0RG/image.png"
                 alt=""
-                className="xl:w-15 xl:h-15 w-10 h-10 xl:mr-2 mr-1"
+                className="xl:w-15 xl:h-15 w-10 h-10"
               />
               <div>
-                <p className="text-lg xl:text-2xl font-bold">
-                  Shelf
-                  <span className="text-orange-400">Sync</span>
+                <p className="text-lg xl:text-2xl font-bold -ml-2 text-[#0096db]">
+                  Parcel
+                  <span className="text-orange-400">Pilot</span>
                 </p>
               </div>
             </div>

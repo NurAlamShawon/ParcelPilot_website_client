@@ -12,31 +12,7 @@ import { auth } from "../../src/firebase-init";
 import { GithubAuthProvider } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 
-
-
-
-const fetchbooks = async () => {
-  const res = await fetch("https://library-management-website-server.vercel.app/books");
-  return res.json();
-};
-
-
-
 const ContextProvider = ({ children }) => {
-
-
-
-
-  const [books, setbooks] = useState([]);
- 
-
-  useEffect(() => {
-    fetchbooks().then((data) => setbooks(data));
-  }, []);
-
-
-
-
   const [loading, setloading] = useState(true);
   const [currentuser, setcurrentuser] = useState(null);
 
@@ -89,7 +65,6 @@ const ContextProvider = ({ children }) => {
   }, []);
 
   const userinfo = {
-    books,
     signupwithgoogle,
     signupwithgithub,
     signupwithemail,
