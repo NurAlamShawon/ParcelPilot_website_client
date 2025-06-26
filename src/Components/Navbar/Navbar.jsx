@@ -56,13 +56,16 @@ const Navbar = () => {
                 <NavLink to={"/"}>Home</NavLink>
               </li>
               <li>
-                <NavLink to={"/all-books"}>All Books</NavLink>
+                <NavLink to={"/book-parcel"}>Book Parcel</NavLink>
               </li>
               <li>
-                <NavLink to={"/add-book"}>Add Book</NavLink>
+                <NavLink to={"/view-booking"}>View Booking</NavLink>
               </li>
               <li>
-                <NavLink to={"/borrow-books"}>Borrowed Books</NavLink>
+                <NavLink to={"/track-parcel"}>Track Parcel</NavLink>
+              </li>
+              <li>
+                <NavLink to={"/branches"}>Our Branches</NavLink>
               </li>
             </ul>
           </div>
@@ -89,13 +92,16 @@ const Navbar = () => {
               <NavLink to={"/"}>Home</NavLink>
             </li>
             <li>
-              <NavLink to={"/all-books"}>All Books</NavLink>
+              <NavLink to={"/book-parcel"}>Book Parcel</NavLink>
             </li>
             <li>
-              <NavLink to={"/add-book"}>Add Book</NavLink>
+              <NavLink to={"/view-booking"}>View Booking</NavLink>
             </li>
             <li>
-              <NavLink to={"/borrow-books"}>Borrowed Books</NavLink>
+              <NavLink to={"/track-parcel"}>Track Parcel</NavLink>
+            </li>
+            <li>
+              <NavLink to={"/branches"}>Our Branches</NavLink>
             </li>
           </ul>
         </div>
@@ -169,12 +175,6 @@ const Navbar = () => {
               <Link to="/authentication">
                 {" "}
                 <button className="btn  bg-[#0096db] xl:mx-2">Login</button>
-              </Link>
-              <Link to="register">
-                {" "}
-                <button className="btn bg-[#f77b33] xl:block hidden">
-                  Register
-                </button>
               </Link>
             </div>
           )}

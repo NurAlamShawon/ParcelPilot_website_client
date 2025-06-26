@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ValueContext } from "../Context/ValueContext";
+import {ValueContext} from "../../Context/ValueContext";
 import { useLocation, useNavigate } from "react-router";
 
 const GoogleSignIn = () => {

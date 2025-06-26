@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from "react-router";
-import { auth } from "../firebase-init";
+import { auth } from "../../../src/firebase-init";
 import { sendEmailVerification, updateProfile } from "firebase/auth";
 import { ValueContext } from '../../Context/ValueContext';
+import GoogleSignIn from '../GoogleSignIn/GoogleSignIn';
 
 const Registration = () => {
     const { signupwithemail } = useContext(ValueContext);
@@ -182,7 +183,7 @@ const Registration = () => {
             <p className="text-red-500  text-base"> {error ? error : ""}</p>
           </div>
 
-          <GoogleandGithubsign></GoogleandGithubsign>
+         <GoogleSignIn></GoogleSignIn>
         </form>
       </div>
     </div>

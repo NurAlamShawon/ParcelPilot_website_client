@@ -9,7 +9,6 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { auth } from "../../src/firebase-init";
-import { GithubAuthProvider } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 
 const ContextProvider = ({ children }) => {
@@ -19,12 +18,6 @@ const ContextProvider = ({ children }) => {
   const signupwithgoogle = () => {
     setloading(true);
     const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
-  };
-
-  const signupwithgithub = () => {
-    setloading(true);
-    const provider = new GithubAuthProvider();
     return signInWithPopup(auth, provider);
   };
 
@@ -66,7 +59,6 @@ const ContextProvider = ({ children }) => {
 
   const userinfo = {
     signupwithgoogle,
-    signupwithgithub,
     signupwithemail,
     loginwithemail,
     loading,
