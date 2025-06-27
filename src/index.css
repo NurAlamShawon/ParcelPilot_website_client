@@ -11,6 +11,9 @@ li>a.active{
     border-radius: 0px;
 
 }
+.bg{
+  background-color: #EAECED;
+}
 
 .raleway{
   font-family: "Raleway", sans-serif;
