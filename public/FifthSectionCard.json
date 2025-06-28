@@ -1,17 +1,17 @@
 [
   {
-    "image": "https://via.placeholder.com/120",
-    "title": "Fast Delivery",
-    "description": "Get your parcels delivered in under 24 hours across the city."
+    "image": "https://i.postimg.cc/TPBVjgTY/live-tracking.png",
+    "title": "Live Parcel Tracking",
+    "description": "Stay updated in real-time with our live parcel tracking feature. From pick-up to delivery, monitor your shipment's journey and get instant status updates for complete peace of mind."
   },
   {
-    "image": "https://via.placeholder.com/120",
-    "title": "Live Tracking",
-    "description": "Track your delivery in real-time with our tracking system."
+    "image": "https://i.postimg.cc/8zKB5x3v/safe-delivery.png",
+    "title": "100% Safe Delivery",
+    "description": "We ensure your parcels are handled with the utmost care and delivered securely to their destination. Our reliable process guarantees safe and damage-free delivery every time."
   },
   {
-    "image": "https://via.placeholder.com/120",
-    "title": "Secure Packaging",
-    "description": "We ensure safe handling and tamper-proof packaging."
+    "image": "https://i.postimg.cc/8zKB5x3v/safe-delivery.png",
+    "title": "24/7 Call Center Support",
+    "description": "Our dedicated support team is available around the clock to assist you with any questions, updates, or delivery concerns—anytime you need us."
   }
 ]

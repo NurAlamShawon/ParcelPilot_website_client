@@ -65,7 +65,7 @@ const Navbar = () => {
                 <NavLink to={"/track-parcel"}>Track Parcel</NavLink>
               </li>
               <li>
-                <NavLink to={"/branches"}>Our Branches</NavLink>
+                <NavLink to={"/coverage"}>Coverage</NavLink>
               </li>
             </ul>
           </div>
@@ -101,7 +101,7 @@ const Navbar = () => {
               <NavLink to={"/track-parcel"}>Track Parcel</NavLink>
             </li>
             <li>
-              <NavLink to={"/branches"}>Our Branches</NavLink>
+              <NavLink to={"/coverage"}>Coverage</NavLink>
             </li>
           </ul>
         </div>

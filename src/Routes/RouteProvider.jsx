@@ -27,7 +27,7 @@ const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: "branches",
+        path: "coverage",
         Component: Home,
       },
     ],

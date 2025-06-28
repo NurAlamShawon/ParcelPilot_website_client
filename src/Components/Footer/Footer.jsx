@@ -21,8 +21,21 @@ const Footer = () => {
             </div>
           </div>
         </Link>
+        <p className="text-base text-[#DADADA] max-w-4xl">
+          Enjoy fast, reliable parcel delivery with real-time tracking and zero
+          hassle. From personal packages to business shipments — we deliver on
+          time, every time.
+        </p>
 
-        <p>Copyright © {new Date().getFullYear()} - All right reserved</p>
+        <div className="my-5 xl:w-7xl mx-auto border-t-2 border-b-2 border-dashed border-[#03464D]">
+          <ul className="w-full items-center justify-center flex flex-row space-x-4 rounded-box z-1 mt-3 p-2 shadow">
+            <li>Home</li>
+            <li>Coverage</li>
+            <li>About</li>
+            <li>Contact</li>
+            <li>Blog</li>
+          </ul>
+        </div>
       </aside>
       <nav>
         <div className="grid grid-flow-col gap-4">
