@@ -4,7 +4,7 @@ import { ValueContext } from "../../Context/ValueContext";
 
 const Navbar = () => {
   const { currentuser, signout } = useContext(ValueContext);
-  console.log(currentuser);
+
   const hanglegotologin = () => {
     signout();
   };
@@ -23,7 +23,7 @@ const Navbar = () => {
   }, [theme]);
 
   return (
-    <div className="mb-10 raleway">
+    <div className=" raleway">
       <div className="navbar bg-base-100 shadow-sm xl:px-10">
         <div className="navbar-start">
           <div className="dropdown">

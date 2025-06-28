@@ -3,7 +3,7 @@ import React from "react";
 const MerchantSection = () => {
   return (
     <div className="max-w-7xl my-30 mx-auto bg-[#03373D] p-4 xl:p-10 rounded-2xl bg-no-repeat bg-[url('https://i.postimg.cc/MGdH2wgg/be-a-merchant-bg.png')]">
-      <div className="xl:flex flex-col items-center">
+      <div className="xl:flex flex-row items-center">
         <div className="space-y-5">
           <h1 className="text-3xl font-bold text-white">
             Merchant and Customer Satisfaction is Our First Priority

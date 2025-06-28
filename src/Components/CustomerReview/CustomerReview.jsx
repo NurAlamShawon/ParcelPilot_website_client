@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
 
 const CARD_WIDTH = 350;
-const GAP = 16; // px (Tailwind's gap-4)
+const GAP = 16;
 
 const CustomerReview = () => {
-  const [testimonials, settestimonials] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
+  const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    const fetchreview = async () => {
-      const res = await fetch("/Review.json");
-      const data = await res.json();
-      console.log(data)
-      settestimonials(data);
+    const fetchReview = async () => {
+      try {
+        const res = await fetch("/Review.json");
+        const data = await res.json();
+        setTestimonials(data);
+      } catch (error) {
+        console.error("Error loading testimonials:", error);
+      }
     };
-    fetchreview();
+    fetchReview();
   }, []);
 
-  const [current, setCurrent] = useState(0);
   const total = testimonials.length;
 
   const prevTestimonial = () => {
@@ -27,7 +30,6 @@ const CustomerReview = () => {
     setCurrent((prev) => (prev + 1) % total);
   };
 
-  // Generate visible cards dynamically: center card + 2 before + 2 after
   const getVisibleCards = () => {
     const visible = [];
     for (let offset = -2; offset <= 2; offset++) {
@@ -42,34 +44,28 @@ const CustomerReview = () => {
   };
 
   return (
-    <div>
-      <div className="space-y-5">
+    <div className="px-4">
+      <div className="space-y-5 max-w-3xl mx-auto text-center">
         <img
           src="https://i.postimg.cc/TPBVjgTY/live-tracking.png"
-          alt=""
+          alt="Live Tracking"
           className="mx-auto"
         />
-        <h1 className="text-[#03373D] text-center text-3xl font-extrabold">
-          What our customers are sayings
+        <h1 className="text-[#03373D] text-3xl font-extrabold">
+          What our customers are saying
         </h1>
-        <p className="text-[#606060] text-center text-base">
+        <p className="text-[#606060] text-base">
           Enhance posture, mobility, and well-being effortlessly with Posture
           Pro. Achieve proper alignment, reduce pain, and strengthen your body
           with ease!
         </p>
       </div>
 
-      <div className="relative w-full flex flex-col items-center overflow-hidden my-20">
-        <div className="w-full overflow-hidden">
-          <div
-            className="flex transition-transform duration-500 ease-in-out gap-4"
-            style={{
-              transform: `translateX(calc(50% - ${CARD_WIDTH / 2}px - ${
-                (CARD_WIDTH + GAP) * 2
-              }px))`,
-            }}
-          >
-            {getVisibleCards().map((testimonial) => {
+      {/* Carousel */}
+      <div className="relative w-full h-[400px] my-20 flex items-center justify-center overflow-hidden">
+        <div className="relative w-full h-full flex items-center justify-center">
+          {testimonials.length > 0 &&
+            getVisibleCards().map((testimonial) => {
               const { relative, key } = testimonial;
 
               let scale = "scale-90";
@@ -92,16 +88,24 @@ const CustomerReview = () => {
               return (
                 <div
                   key={key}
-                  className={`w-[${CARD_WIDTH}px] shrink-0 transition-all duration-300 ease-in-out transform ${scale} ${blur} ${opacity} ${z}`}
+                  className={`absolute transition-all duration-500 ease-in-out ${scale} ${blur} ${opacity} ${z}`}
+                  style={{
+                    transform: `translateX(${relative * (CARD_WIDTH + GAP)}px)`,
+                    width: `${CARD_WIDTH}px`,
+                  }}
                 >
-                  <div className="bg-white rounded-lg p-6 shadow-md">
-                    <img src="https://i.postimg.cc/BZ8zKgZK/review-Quote.png" alt="" />
+                  <div className="bg-white rounded-lg p-6 shadow-md h-full">
+                    <img
+                      src="https://i.postimg.cc/BZ8zKgZK/review-Quote.png"
+                      alt="quote"
+                      className="mb-4"
+                    />
                     <p className="text-gray-700 text-base italic mb-4">
                       “{testimonial.message}”
                     </p>
                     <div className="flex items-center space-x-4">
                       <div className="h-10 w-10 rounded-full bg-gray-800 text-white flex items-center justify-center font-bold text-sm">
-                        {testimonial.name}
+                        {testimonial.name.charAt(0)}
                       </div>
                       <div>
                         <h4 className="text-md font-semibold text-gray-900">
@@ -116,11 +120,10 @@ const CustomerReview = () => {
                 </div>
               );
             })}
-          </div>
         </div>
 
         {/* Navigation */}
-        <div className="flex justify-center items-center mt-6 space-x-4">
+        <div className="flex justify-center items-center mt-6 space-x-4 absolute bottom-0 left-1/2 -translate-x-1/2">
           <button
             onClick={prevTestimonial}
             className="w-8 h-8 rounded-full bg-gray-300 hover:bg-gray-400 text-white flex items-center justify-center transition"

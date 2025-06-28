@@ -14,6 +14,7 @@ import { GoogleAuthProvider } from "firebase/auth";
 const ContextProvider = ({ children }) => {
   const [loading, setloading] = useState(true);
   const [currentuser, setcurrentuser] = useState(null);
+  const [code,setcode]=useState(null);
 
   const signupwithgoogle = () => {
     setloading(true);
@@ -65,6 +66,8 @@ const ContextProvider = ({ children }) => {
     currentuser,
     signout,
     resetpassword,
+    code,
+    setcode
   };
 
   return (

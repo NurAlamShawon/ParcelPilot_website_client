@@ -4,6 +4,10 @@ import Home from "../Pages/Home";
 import AuthenticationLayout from "../Layouts/AuthenticationLayout";
 import Login from "../Components/Login/Login";
 import Registration from "../Components/Registration/Registration";
+import Coverage from "../Components/CoverageMap/Coverage";
+import ForgetPass from "../Components/ResetPassword/ForgetPass";
+import VerifyCode from "../Components/ResetPassword/VerifyCode";
+import ResetPass from "../Components/ResetPassword/ResetPass";
 
 const router = createBrowserRouter([
   {
@@ -28,7 +32,7 @@ const router = createBrowserRouter([
       },
       {
         path: "coverage",
-        Component: Home,
+        Component: Coverage,
       },
     ],
   },
@@ -43,6 +47,18 @@ const router = createBrowserRouter([
       {
         path: "registration",
         Component: Registration,
+      },
+      {
+        path: "forget-pass",
+        Component: ForgetPass,
+      },
+      {
+        path: "verify-code",
+        Component: VerifyCode,
+      },
+      {
+        path: "reset-pass",
+        Component: ResetPass,
       },
     ],
   },
