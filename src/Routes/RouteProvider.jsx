@@ -8,6 +8,7 @@ import Coverage from "../Components/CoverageMap/Coverage";
 import ForgetPass from "../Components/ResetPassword/ForgetPass";
 import VerifyCode from "../Components/ResetPassword/VerifyCode";
 import ResetPass from "../Components/ResetPassword/ResetPass";
+import AddParcel from "../Components/AddParcel/AddParcel";
 
 const router = createBrowserRouter([
   {
@@ -19,8 +20,8 @@ const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: "book-parcel",
-        Component: Home,
+        path: "add-parcel",
+        Component: AddParcel,
       },
       {
         path: "view-booking",
@@ -48,18 +49,18 @@ const router = createBrowserRouter([
         path: "registration",
         Component: Registration,
       },
-      {
-        path: "forget-pass",
-        Component: ForgetPass,
-      },
-      {
-        path: "verify-code",
-        Component: VerifyCode,
-      },
-      {
-        path: "reset-pass",
-        Component: ResetPass,
-      },
+      // {
+      //   path: "forget-pass",
+      //   Component: ForgetPass,
+      // },
+      // {
+      //   path: "verify-code",
+      //   Component: VerifyCode,
+      // },
+      // {
+      //   path: "reset-pass",
+      //   Component: ResetPass,
+      // },
     ],
   },
 ]);

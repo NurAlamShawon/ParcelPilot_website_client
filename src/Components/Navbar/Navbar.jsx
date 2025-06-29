@@ -56,7 +56,7 @@ const Navbar = () => {
                 <NavLink to={"/"}>Home</NavLink>
               </li>
               <li>
-                <NavLink to={"/book-parcel"}>Book Parcel</NavLink>
+                <NavLink to={"/add-parcel"}>Add Parcel</NavLink>
               </li>
               <li>
                 <NavLink to={"/view-booking"}>View Booking</NavLink>
@@ -89,20 +89,20 @@ const Navbar = () => {
         <div className="navbar-center hidden lg:flex">
           <ul className="menu space-x-5 menu-horizontal px-1">
             <li>
-              <NavLink to={"/"}>Home</NavLink>
-            </li>
-            <li>
-              <NavLink to={"/book-parcel"}>Book Parcel</NavLink>
-            </li>
-            <li>
-              <NavLink to={"/view-booking"}>View Booking</NavLink>
-            </li>
-            <li>
-              <NavLink to={"/track-parcel"}>Track Parcel</NavLink>
-            </li>
-            <li>
-              <NavLink to={"/coverage"}>Coverage</NavLink>
-            </li>
+                <NavLink to={"/"}>Home</NavLink>
+              </li>
+              <li>
+                <NavLink to={"/add-parcel"}>Add Parcel</NavLink>
+              </li>
+              <li>
+                <NavLink to={"/view-booking"}>View Booking</NavLink>
+              </li>
+              <li>
+                <NavLink to={"/track-parcel"}>Track Parcel</NavLink>
+              </li>
+              <li>
+                <NavLink to={"/coverage"}>Coverage</NavLink>
+              </li>
           </ul>
         </div>
         <div className="navbar-end w-76 xl:w-1/2">

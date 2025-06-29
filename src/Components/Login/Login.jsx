@@ -1,20 +1,21 @@
 import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { auth } from "../../../src/firebase-init";
+import { auth } from "../../firebase-init";
 import GoogleSignIn from "../GoogleSignIn/GoogleSignIn";
 import { ValueContext } from "../../Context/ValueContext";
 
 const Login = () => {
   const [eye, seteye] = useState(false);
   const [error, seterror] = useState("");
-  const { loginwithemail } = useContext(ValueContext);
+  const { loginwithemail, resetpassword } = useContext(ValueContext);
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const [email, setemail] = useState("");
 
   const handlelogin = (e) => {
     e.preventDefault();
     const email = e.target.email.value;
+    setemail(email);
     const password = e.target.password.value;
 
     const passcheck = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
@@ -53,14 +54,33 @@ const Login = () => {
       });
   };
 
+  const handleforget = () => {
+    if (!email) {
+      alert("Enter your email");
+    }
+    resetpassword(email)
+      .then(() => {
+        // Password reset email sent!
+        // ..
+        alert("Check your email a verification code has send to your email");
+      })
+      .catch((error) => {
+        // const errorCode = error.code;
+        // const errorMessage = error.message;
+        console.log(error);
+        // ..
+      });
+  };
+
   return (
     <div className="w-full xl:flex flex-row">
-      {/* left side */}
-      <div className="xl:w-1/2 w-full bg-white  shrink-0 shadow-2xl border-2 border-gray-200">
-        <div className="max-w-xl mx-auto">
-          <form className="space-y-6  xl:m-20 m-10" onSubmit={handlelogin}>
-            <h1 className="font-semibold text-2xl text-center">Welcome Back</h1>
-            <p className="text-center text-base">Login with ParcelPilot</p>
+      <div className="xl:w-1/2 bg-white w-full max-w-md mx-auto mt-10 p-6  rounded shadow my-5">
+        <div>
+          <form className="space-y-6  m-10 " onSubmit={handlelogin}>
+            <h1 className="font-semibold text-2xl text-center">Welcome back</h1>
+            <p className="text-base text-center text-gray-400">
+              Login with ParcelPilot
+            </p>
             <div className="border-1 border-gray-200 mx-2"></div>
             <label>Email Address</label>
             <br></br>
@@ -69,7 +89,7 @@ const Login = () => {
               name="email"
               placeholder="Enter your email address"
               className="input w-full"
-            
+              onChange={(e) => setemail(e.target.value)}
             />
             <br></br>
             <label>Password</label>
@@ -127,13 +147,12 @@ const Login = () => {
               </button>
             </div>
 
-            <Link to="forget-pass">
-             <span className="hover:text-sky-700 underline cursor-pointer  hover:underline-offset-2">
+            <span
+              className="hover:text-sky-700 underline cursor-pointer  hover:underline-offset-2"
+              onClick={handleforget}
+            >
               Forget Password?
             </span>
-            </Link>
-
-           
 
             <br></br>
             <br></br>
@@ -141,10 +160,9 @@ const Login = () => {
             <input
               type="submit"
               value="Submit"
-              className="text-white btn bg-[#0096db] w-full"
+              className="text-white btn bg-primary w-full"
             />
             <br></br>
-
             <div className="flex w-full flex-col">
               <div>
                 {" "}
@@ -171,8 +189,6 @@ const Login = () => {
           </form>
         </div>
       </div>
-
-      {/* right side */}
       <div className="xl:w-1/2 w-full bg-[#FAFDF0] border-2 border-gray-200">
         <img
           src="https://i.postimg.cc/fWpYV7kk/auth-Image.png"

@@ -9,6 +9,7 @@ const ForgetPass = () => {
 
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   setcode(code);
+  console.log(code)
 
   const sendOTP = async (email, code) => {
     try {
@@ -55,7 +56,7 @@ const ForgetPass = () => {
             />
 
             <br></br>
-            <Link to="/authentication/verify-code">
+            <Link to="/verify-code">
               <input
                 type="submit"
                 value="Send"
