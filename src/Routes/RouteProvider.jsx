@@ -11,6 +11,8 @@ import ResetPass from "../Components/ResetPassword/ResetPass";
 import AddParcel from "../Components/AddParcel/AddParcel";
 import DashBoardLayout from "../Layouts/DashBoardLayout";
 import Myparcels from "../Components/Dashboard/Myparcels";
+import Payment from "../Components/Payment/Payment";
+import PaymentHistory from "../Components/Payment/PaymentHistory";
 
 const router = createBrowserRouter([
   {
@@ -71,7 +73,15 @@ const router = createBrowserRouter([
     children:[
       {
         index:true,Component:Myparcels
-      }
+      },
+      {
+        path:"payment/:id",
+        Component:Payment
+      },
+      {
+        path:"payment-history",
+        Component:PaymentHistory
+      },
     ]
 
   },

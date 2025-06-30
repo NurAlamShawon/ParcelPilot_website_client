@@ -3,11 +3,13 @@ import { ValueContext } from "../../Context/ValueContext";
 import useAxiosSecure from "../../Hooks/UseaxiosSecure";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 
 const Myparcels = () => {
     const queryClient=useQueryClient();
   const { currentuser } = useContext(ValueContext);
+  const navigate=useNavigate();
   console.log(currentuser);
   const axiosInstance = useAxiosSecure();
 
@@ -45,54 +47,78 @@ const Myparcels = () => {
   });
   }
 
+
+const onPay=id=>{
+navigate(`payment/${id}`);
+}
+
+
+
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full border border-gray-200 text-sm text-left">
-        <thead className="bg-gray-100 text-gray-700">
-          <tr>
-            <th className="px-1.5 py-2 text-center">Tittle</th>
-            <th className="px-1.5 py-2 text-center">Type</th>
-            <th className="px-1.5 py-2 text-center">Payment</th>
-            <th className="px-1.5 py-2 text-center">Cost (৳)</th>
-            <th className="px-1.5 py-2 text-center">Weight (kg)</th>
-            <th className="px-1.5 py-2 text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {parcels.map((parcel) => (
-            <tr key={parcel._id} className="border-b">
-              <td className="px-1.5 py-2 font-medium text-center">{parcel.title}</td>
-              <td className="px-1.5 py-2 capitalize text-center">{parcel.type}</td>
-              <td className="px-1.5 py-2 capitalize text-center">
-                {parcel.payment_status}
-              </td>
-              <td className="px-1.5 py-2 text-center">{parcel.cost}</td>
-              <td className="px-1.5 py-2 text-center">{parcel.weight}</td>
-              <td className="px-1.5 py-2 space-x-2">
-                <button
-                  //   onClick={() => onPay(parcel)}
-                  className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-                >
-                  Pay
-                </button>
-                <button
-                  //   onClick={() => onView(parcel)}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
-                >
-                  View
-                </button>
-                <button
-                    onClick={() => onDelete(parcel._id)}
-                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+<div className="overflow-x-auto">
+  <table className="min-w-full border border-gray-200 text-sm text-left">
+    <thead className="bg-gray-100 text-gray-700">
+      <tr>
+        <th className="px-1.5 py-2 text-center">Title</th>
+        <th className="px-1.5 py-2 text-center">Type</th>
+        <th className="px-1.5 py-2 text-center">Payment</th>
+        <th className="px-1.5 py-2 text-center">Cost (৳)</th>
+        <th className="px-1.5 py-2 text-center">Weight (kg)</th>
+        <th className="px-1.5 py-2 text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {parcels.map((parcel) => (
+        <tr key={parcel._id} className="border-b">
+          <td className="px-1.5 py-2 font-medium text-center">{parcel.title}</td>
+          <td className="px-1.5 py-2 capitalize text-center">{parcel.type}</td>
+
+          {/* Payment Status Button */}
+          <td className="px-1.5 py-2 text-center">
+            <button
+              className={`px-3 py-1 rounded font-semibold text-white ${
+                parcel.payment_status === "paid"
+                  ? "bg-green-500"
+                  : "bg-red-500"
+              }`}
+              disabled
+            >
+              {parcel.payment_status === "paid" ? "Paid" : "Unpaid"}
+            </button>
+          </td>
+
+          <td className="px-1.5 py-2 text-center">{parcel.cost}</td>
+          <td className="px-1.5 py-2 text-center">{parcel.weight}</td>
+
+          <td className="px-1.5 py-2 space-x-2 text-center">
+            {/* Pay Button only if unpaid */}
+            {parcel.payment_status !== "paid" && (
+              <button
+                onClick={() => onPay(parcel._id)}
+                className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+              >
+                Pay
+              </button>
+            )}
+            <button
+              // onClick={() => onView(parcel)}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+            >
+              View
+            </button>
+            <button
+              onClick={() => onDelete(parcel._id)}
+              className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
   );
 };
 

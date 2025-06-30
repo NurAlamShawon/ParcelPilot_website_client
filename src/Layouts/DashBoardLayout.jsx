@@ -48,8 +48,12 @@ const DashBoardLayout = () => {
             Home</Link>
           </li>
          <li>
-            <Link to="/">
-            Home</Link>
+            <Link to="payment-history">
+            Payment History</Link>
+          </li>
+          <li>
+            <Link to="/dashboard">
+            DashBoard</Link>
           </li>
         </ul>
       </div>
