@@ -1,28 +1,35 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import { ValueContext } from "../../Context/ValueContext";
-import axios from "axios";
-
-const regionsData = [
-  {
-    region: "Dhaka",
-    serviceCenters: ["Gulshan", "Mirpur", "Uttara"],
-  },
-  {
-    region: "Khulna",
-    serviceCenters: ["Kushtia", "Jessore", "Satkhira"],
-  },
-];
+import useAxiosSecure from "../../Hooks/UseaxiosSecure";
 
 const AddParcel = () => {
   const [showConfirm, setShowConfirm] = useState(false);
+  const [regionsData, setregionsData] = useState([]);
   const [cost, setCost] = useState(0);
   const [formData, setFormData] = useState(null);
   // const navigate = useNavigate();
   const { currentuser } = useContext(ValueContext);
+  const axiosInstance = useAxiosSecure();
+
+  useEffect(() => {
+    const fetchregionsdata = async () => {
+      const res = await fetch("/Coverage.json");
+      const data = await res.json();
+      const seen = new Set();
+      const unique = data.filter((item) => {
+        if (seen.has(item.region)) return false;
+        seen.add(item.region);
+        return true;
+      });
+
+      setregionsData(unique);
+    };
+    fetchregionsdata();
+  }, []);
 
   const generateTrackingId = (region) => {
     const random = Math.floor(100000 + Math.random() * 900000); // 6-digit
@@ -35,6 +42,7 @@ const AddParcel = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    reset, // 👈 add this
   } = useForm();
 
   const type = watch("type");
@@ -42,7 +50,8 @@ const AddParcel = () => {
   const receiverRegion = watch("receiverRegion");
 
   const getServiceCenters = (region) => {
-    return regionsData.find((r) => r.region === region)?.serviceCenters || [];
+    if (!Array.isArray(regionsData)) return [];
+    return regionsData.find((r) => r.region === region)?.covered_area || [];
   };
 
   console.log(errors);
@@ -82,6 +91,7 @@ const AddParcel = () => {
   const onSubmit = (data) => {
     const costBreakdown = calculateCost(data);
     setFormData(data);
+    setCost(costBreakdown.total);
 
     Swal.fire({
       title: "Confirm Parcel",
@@ -136,14 +146,16 @@ const AddParcel = () => {
           payment_status: "unpaid",
         };
 
-        axios
-          .post("http://localhost:3000/parcels", parcelData)
+        axiosInstance
+          .post("/parcels", parcelData)
           .then((res) => console.log(res))
           .catch((err) => console.log(err));
 
         // simulate API call or send to server
         console.log("Parcel sent to server:", parcelData);
         toast.success("Parcel submitted successfully!");
+        reset(); // Reset form fields
+        setCost(0); // Reset cost state
         // navigate("/transaction");
       } else {
         toast("You can review and update the form.");
@@ -404,11 +416,13 @@ const AddParcel = () => {
                 className="input w-full appearance-none"
               >
                 <option value="">Select Region</option>
-                {regionsData.map((r) => (
-                  <option key={r.region} value={r.region}>
-                    {r.region}
-                  </option>
-                ))}
+                {[...new Set(regionsData.map((r) => r.region))].map(
+                  (region) => (
+                    <option key={region} value={region}>
+                      {region}
+                    </option>
+                  )
+                )}
               </select>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

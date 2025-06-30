@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
 import { ValueContext } from "../../Context/ValueContext";
+import ParcelpilotLogo from "../ParcelpilotLogo/ParcelpilotLogo";
 
 const Navbar = () => {
   const { currentuser, signout } = useContext(ValueContext);
@@ -59,7 +60,7 @@ const Navbar = () => {
                 <NavLink to={"/add-parcel"}>Add Parcel</NavLink>
               </li>
               <li>
-                <NavLink to={"/view-booking"}>View Booking</NavLink>
+                <NavLink to={"/dashboard"}>Dashboard</NavLink>
               </li>
               <li>
                 <NavLink to={"/track-parcel"}>Track Parcel</NavLink>
@@ -69,22 +70,7 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-          <Link to="/">
-            {" "}
-            <div className="flex items-center">
-              <img
-                src="https://i.postimg.cc/C588y0RG/image.png"
-                alt=""
-                className="xl:w-15 xl:h-15 w-10 h-10"
-              />
-              <div>
-                <p className="text-lg xl:text-2xl font-bold -ml-2 text-[#0096db]">
-                  Parcel
-                  <span className="text-[#f77b33]">Pilot</span>
-                </p>
-              </div>
-            </div>
-          </Link>
+          <ParcelpilotLogo></ParcelpilotLogo>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu space-x-5 menu-horizontal px-1">
@@ -94,8 +80,8 @@ const Navbar = () => {
               <li>
                 <NavLink to={"/add-parcel"}>Add Parcel</NavLink>
               </li>
-              <li>
-                <NavLink to={"/view-booking"}>View Booking</NavLink>
+               <li>
+                <NavLink to={"/dashboard"}>Dashboard</NavLink>
               </li>
               <li>
                 <NavLink to={"/track-parcel"}>Track Parcel</NavLink>

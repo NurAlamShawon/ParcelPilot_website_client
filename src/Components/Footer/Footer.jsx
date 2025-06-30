@@ -1,26 +1,12 @@
 import React from "react";
 import { Link } from "react-router";
+import ParcelpilotLogo from "../ParcelpilotLogo/ParcelpilotLogo";
 
 const Footer = () => {
   return (
     <footer className="footer footer-horizontal bg-black footer-center  text-primary-content p-10">
       <aside>
-        <Link to="/">
-          {" "}
-          <div className="flex items-center">
-            <img
-              src="https://i.postimg.cc/C588y0RG/image.png"
-              alt=""
-              className="xl:w-15 xl:h-15 w-10 h-10"
-            />
-            <div>
-              <p className="text-lg xl:text-2xl font-bold -ml-2 text-[#0096db]">
-                Parcel
-                <span className="text-[#f77b33]">Pilot</span>
-              </p>
-            </div>
-          </div>
-        </Link>
+        <ParcelpilotLogo></ParcelpilotLogo>
         <p className="text-base text-[#DADADA] max-w-4xl">
           Enjoy fast, reliable parcel delivery with real-time tracking and zero
           hassle. From personal packages to business shipments — we deliver on

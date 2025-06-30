@@ -9,6 +9,8 @@ import ForgetPass from "../Components/ResetPassword/ForgetPass";
 import VerifyCode from "../Components/ResetPassword/VerifyCode";
 import ResetPass from "../Components/ResetPassword/ResetPass";
 import AddParcel from "../Components/AddParcel/AddParcel";
+import DashBoardLayout from "../Layouts/DashBoardLayout";
+import Myparcels from "../Components/Dashboard/Myparcels";
 
 const router = createBrowserRouter([
   {
@@ -23,10 +25,10 @@ const router = createBrowserRouter([
         path: "add-parcel",
         Component: AddParcel,
       },
-      {
-        path: "view-booking",
-        Component: Home,
-      },
+      // {
+      //   path: "view-booking",
+      //   Component: Home,
+      // },
       {
         path: "track-parcel",
         Component: Home,
@@ -62,6 +64,16 @@ const router = createBrowserRouter([
       //   Component: ResetPass,
       // },
     ],
+  },
+  {
+    path:"dashboard",
+    Component:DashBoardLayout,
+    children:[
+      {
+        index:true,Component:Myparcels
+      }
+    ]
+
   },
 ]);
 
