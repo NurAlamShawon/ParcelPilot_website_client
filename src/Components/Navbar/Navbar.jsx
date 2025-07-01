@@ -59,8 +59,14 @@ const Navbar = () => {
               <li>
                 <NavLink to={"/add-parcel"}>Add Parcel</NavLink>
               </li>
+              {currentuser && (
+                <li>
+                  <NavLink to={"/dashboard"}>Dashboard</NavLink>
+                </li>
+              )}
+
               <li>
-                <NavLink to={"/dashboard"}>Dashboard</NavLink>
+                <NavLink to={"/be-a-rider"}>Coverage</NavLink>
               </li>
               <li>
                 <NavLink to={"/coverage"}>Coverage</NavLink>
@@ -77,8 +83,13 @@ const Navbar = () => {
             <li>
               <NavLink to={"/add-parcel"}>Add Parcel</NavLink>
             </li>
+            {currentuser && (
+              <li>
+                <NavLink to={"/dashboard"}>Dashboard</NavLink>
+              </li>
+            )}
             <li>
-              <NavLink to={"/dashboard"}>Dashboard</NavLink>
+              <NavLink to={"/be-a-rider"}>Be A Rider</NavLink>
             </li>
             <li>
               <NavLink to={"/coverage"}>Coverage</NavLink>

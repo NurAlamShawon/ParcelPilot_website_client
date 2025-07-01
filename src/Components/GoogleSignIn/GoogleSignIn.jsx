@@ -12,7 +12,7 @@ const GoogleSignIn = () => {
   const loginwithgoogle = () => {
     signupwithgoogle()
       .then(async(result) => {
-
+  navigate(location?.state || "/");
 
 //save in the database
         const userInfo={
@@ -31,7 +31,7 @@ console.log(res)
 
 
         // console.log("login successfully",result)
-        navigate(location?.state || "/");
+      
       })
       .catch((error) => {
         // Handle Errors here.

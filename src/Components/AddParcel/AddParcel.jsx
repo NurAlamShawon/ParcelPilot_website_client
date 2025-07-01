@@ -1,60 +1,81 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-// import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import { ValueContext } from "../../Context/ValueContext";
-import useAxiosSecure from "../../Hooks/UseaxiosSecure";
+import Useaxios from "../../Hooks/Useaxios";
 
 const AddParcel = () => {
-  const [showConfirm, setShowConfirm] = useState(false);
   const [regionsData, setregionsData] = useState([]);
-  const [cost, setCost] = useState(0);
-  const [formData, setFormData] = useState(null);
-  // const navigate = useNavigate();
+  const [cost, setCost] = useState(null);
   const { currentuser } = useContext(ValueContext);
-  const axiosInstance = useAxiosSecure();
+  const axiosInstance = Useaxios();
 
-  useEffect(() => {
-    const fetchregionsdata = async () => {
-      const res = await fetch("/Coverage.json");
-      const data = await res.json();
-      const seen = new Set();
-      const unique = data.filter((item) => {
-        if (seen.has(item.region)) return false;
-        seen.add(item.region);
-        return true;
-      });
-
-      setregionsData(unique);
-    };
-    fetchregionsdata();
-  }, []);
-
-  const generateTrackingId = (region) => {
-    const random = Math.floor(100000 + Math.random() * 900000); // 6-digit
-    const prefix = region?.slice(0, 3).toUpperCase() || "TRK";
-    return `${prefix}-${random}`;
-  };
+  const [senderDistricts, setSenderDistricts] = useState([]);
+  const [receiverDistricts, setReceiverDistricts] = useState([]);
 
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-    reset, // 👈 add this
+    reset,
   } = useForm();
 
   const type = watch("type");
   const senderRegion = watch("senderRegion");
+  const senderDistrict = watch("senderDistrict");
   const receiverRegion = watch("receiverRegion");
+  const receiverDistrict = watch("receiverDistrict");
 
-  const getServiceCenters = (region) => {
+  // Fetch coverage data once
+  useEffect(() => {
+    const fetchregionsdata = async () => {
+      const res = await fetch("/Coverage.json");
+      const data = await res.json();
+      setregionsData(data);
+    };
+    fetchregionsdata();
+  }, []);
+
+  // Update sender districts when senderRegion changes
+  useEffect(() => {
+    if (!senderRegion) {
+      setSenderDistricts([]);
+      return;
+    }
+    const districts = regionsData
+      .filter((item) => item.region === senderRegion)
+      .map((item) => item.district);
+    setSenderDistricts([...new Set(districts)]);
+  }, [senderRegion, regionsData]);
+
+  // Update receiver districts when receiverRegion changes
+  useEffect(() => {
+    if (!receiverRegion) {
+      setReceiverDistricts([]);
+      return;
+    }
+    const districts = regionsData
+      .filter((item) => item.region === receiverRegion)
+      .map((item) => item.district);
+    setReceiverDistricts([...new Set(districts)]);
+  }, [receiverRegion, regionsData]);
+
+  // Get warehouses filtered by region and district
+  const getServiceCenters = (region, district) => {
     if (!Array.isArray(regionsData)) return [];
-    return regionsData.find((r) => r.region === region)?.covered_area || [];
+    return (
+      regionsData.find((r) => r.region === region && r.district === district)
+        ?.covered_area || []
+    );
   };
 
-  console.log(errors);
+  const generateTrackingId = (region) => {
+    const random = Math.floor(100000 + Math.random() * 900000); // 6-digit
+    const prefix = region?.slice(0, 3).toUpperCase() || "TRK";
+    return `${prefix}-${random}`;
+  };
 
   const calculateCost = (data) => {
     const sameRegion = data.receiverServiceCenter === data.senderServiceCenter;
@@ -79,18 +100,8 @@ const AddParcel = () => {
     return { base, extraPerKg, extraCharge, total: base };
   };
 
-  const handleConfirm = () => {
-    const parcelData = {
-      ...formData,
-    };
-    console.log("Parcel saved:", parcelData);
-    toast.success("Parcel information saved successfully!");
-    setShowConfirm(false);
-  };
-
   const onSubmit = (data) => {
     const costBreakdown = calculateCost(data);
-    setFormData(data);
     setCost(costBreakdown.total);
 
     Swal.fire({
@@ -99,11 +110,11 @@ const AddParcel = () => {
   <div class="text-left text-sm">
     <p><strong>Type:</strong> ${data.type}</p>
     <p><strong>From:</strong> ${data.senderServiceCenter} (${
-        data.senderRegion
-      })</p>
+        data.senderDistrict
+      }, ${data.senderRegion})</p>
     <p><strong>To:</strong> ${data.receiverServiceCenter} (${
-        data.receiverRegion
-      })</p>
+        data.receiverDistrict
+      }, ${data.receiverRegion})</p>
     ${
       data.type === "non-document"
         ? `
@@ -151,12 +162,9 @@ const AddParcel = () => {
           .then((res) => console.log(res))
           .catch((err) => console.log(err));
 
-        // simulate API call or send to server
-        console.log("Parcel sent to server:", parcelData);
         toast.success("Parcel submitted successfully!");
-        reset(); // Reset form fields
-        setCost(0); // Reset cost state
-        // navigate("/transaction");
+        reset();
+        setCost(null);
       } else {
         toast("You can review and update the form.");
       }
@@ -164,7 +172,7 @@ const AddParcel = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6  rounded-xl shadow">
+    <div className="max-w-5xl mx-auto p-6 rounded-xl shadow">
       <h2 className="text-2xl font-bold mb-1">Parcel Delivery Form</h2>
       <p className="mb-6 text-gray-600">
         Fill out the form to schedule your parcel pickup and delivery.
@@ -180,7 +188,7 @@ const AddParcel = () => {
               <input
                 type="radio"
                 value="document"
-                {...register("type", { required: true })}
+                {...register("type", { required: "Please select parcel type" })}
               />
               <span>Document</span>
             </label>
@@ -188,11 +196,14 @@ const AddParcel = () => {
               <input
                 type="radio"
                 value="non-document"
-                {...register("type", { required: true })}
+                {...register("type", { required: "Please select parcel type" })}
               />
               <span>Non-Document</span>
             </label>
           </div>
+          {errors.type && (
+            <p className="text-red-600 text-sm mb-2">{errors.type.message}</p>
+          )}
 
           <div className="flex flex-col lg:flex-row gap-2">
             <div className="flex-1">
@@ -200,10 +211,13 @@ const AddParcel = () => {
                 Parcel Title
               </label>
               <input
-                {...register("title", { required: true })}
+                {...register("title", { required: "Parcel title is required" })}
                 placeholder="Parcel Title"
                 className="input"
               />
+              {errors.title && (
+                <p className="text-red-600 text-sm">{errors.title.message}</p>
+              )}
             </div>
             {type === "non-document" && (
               <div className="flex-1">
@@ -211,12 +225,21 @@ const AddParcel = () => {
                   Weight (kg)
                 </label>
                 <input
-                  {...register("weight")}
+                  {...register("weight", {
+                    required: "Weight is required for non-documents",
+                    valueAsNumber: true,
+                    min: { value: 0.1, message: "Weight must be positive" },
+                  })}
                   type="number"
                   step="0.1"
                   placeholder="Weight"
                   className="input"
                 />
+                {errors.weight && (
+                  <p className="text-red-600 text-sm">
+                    {errors.weight.message}
+                  </p>
+                )}
               </div>
             )}
           </div>
@@ -228,33 +251,52 @@ const AddParcel = () => {
           {/* Sender Info */}
           <div className="flex-1">
             <h3 className="font-semibold mb-4">From Delivery</h3>
+
             <div className="flex flex-col lg:flex-row gap-2">
               <div className="flex-1">
                 <label className="block text-sm font-medium mb-1">
                   Sender Name
                 </label>
                 <input
-                  {...register("senderName", { required: true })}
+                  {...register("senderName", {
+                    required: "Sender name is required",
+                  })}
                   placeholder="Sender Name"
                   defaultValue="John Doe"
                   className="input"
                 />
+                {errors.senderName && (
+                  <p className="text-red-600 text-sm">
+                    {errors.senderName.message}
+                  </p>
+                )}
               </div>
+
               <div className="flex-1 relative">
                 <label className="block text-sm font-medium mb-1">
-                  Pickup Warehouse
+                  Your Region
                 </label>
                 <select
-                  {...register("senderServiceCenter", { required: true })}
-                  className="input appearance-none w-full"
+                  {...register("senderRegion", {
+                    required: "Please select sender region",
+                  })}
+                  className="input w-full appearance-none"
                 >
-                  <option value="">Select Warehouse</option>
-                  {getServiceCenters(senderRegion).map((center) => (
-                    <option key={center} value={center}>
-                      {center}
-                    </option>
-                  ))}
+                  <option value="">Select Region</option>
+                  {regionsData
+                    .map((r) => r.region)
+                    .filter((v, i, a) => a.indexOf(v) === i) // unique regions
+                    .map((region) => (
+                      <option key={region} value={region}>
+                        {region}
+                      </option>
+                    ))}
                 </select>
+                {errors.senderRegion && (
+                  <p className="text-red-600 text-sm">
+                    {errors.senderRegion.message}
+                  </p>
+                )}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -278,38 +320,102 @@ const AddParcel = () => {
                   Sender Address
                 </label>
                 <input
-                  {...register("senderAddress", { required: true })}
+                  {...register("senderAddress", {
+                    required: "Sender address is required",
+                  })}
                   placeholder="Sender Address"
                   className="input"
                 />
+                {errors.senderAddress && (
+                  <p className="text-red-600 text-sm">
+                    {errors.senderAddress.message}
+                  </p>
+                )}
               </div>
               <div className="flex-1">
                 <label className="block text-sm font-medium mb-1">
                   Sender Contact
                 </label>
                 <input
-                  {...register("senderContact", { required: true })}
+                  {...register("senderContact", {
+                    required: "Sender contact is required",
+                  })}
                   placeholder="Sender Contact"
                   className="input"
                 />
+                {errors.senderContact && (
+                  <p className="text-red-600 text-sm">
+                    {errors.senderContact.message}
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="mt-2 relative">
               <label className="block text-sm font-medium mb-1">
-                Your Region
+                Sender District
               </label>
               <select
-                {...register("senderRegion", { required: true })}
+                {...register("senderDistrict", {
+                  required: "Please select sender district",
+                })}
                 className="input w-full appearance-none"
+                disabled={!senderDistricts.length}
               >
-                <option value="">Select Region</option>
-                {regionsData.map((r) => (
-                  <option key={r.region} value={r.region}>
-                    {r.region}
+                <option value="">Select District</option>
+                {senderDistricts.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
                   </option>
                 ))}
               </select>
+              {errors.senderDistrict && (
+                <p className="text-red-600 text-sm">
+                  {errors.senderDistrict.message}
+                </p>
+              )}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6 absolute right-2 top-8"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            </div>
+
+            <div className="mt-2  relative">
+              <label className="block text-sm font-medium mb-1">
+                Pickup Warehouse
+              </label>
+              <select
+                {...register("senderServiceCenter", {
+                  required: "Please select pickup warehouse",
+                })}
+                className="input appearance-none w-full"
+                disabled={!senderDistrict}
+              >
+                <option value="">Select Warehouse</option>
+                {senderDistrict &&
+                  getServiceCenters(senderRegion, senderDistrict).map(
+                    (center) => (
+                      <option key={center} value={center}>
+                        {center}
+                      </option>
+                    )
+                  )}
+              </select>
+              {errors.senderServiceCenter && (
+                <p className="text-red-600 text-sm">
+                  {errors.senderServiceCenter.message}
+                </p>
+              )}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -331,10 +437,17 @@ const AddParcel = () => {
                 Pickup Instruction
               </label>
               <textarea
-                {...register("pickupInstruction", { required: true })}
+                {...register("pickupInstruction", {
+                  required: "Pickup instruction is required",
+                })}
                 placeholder="Pickup Instruction"
                 className="input h-28 lg:h-36 w-full"
               />
+              {errors.pickupInstruction && (
+                <p className="text-red-600 text-sm">
+                  {errors.pickupInstruction.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -347,26 +460,44 @@ const AddParcel = () => {
                   Receiver Name
                 </label>
                 <input
-                  {...register("receiverName", { required: true })}
+                  {...register("receiverName", {
+                    required: "Receiver name is required",
+                  })}
                   placeholder="Receiver Name"
                   className="input"
                 />
+                {errors.receiverName && (
+                  <p className="text-red-600 text-sm">
+                    {errors.receiverName.message}
+                  </p>
+                )}
               </div>
+
               <div className="flex-1 relative">
                 <label className="block text-sm font-medium mb-1">
-                  Delivery Warehouse
+                  Receiver Region
                 </label>
                 <select
-                  {...register("receiverServiceCenter", { required: true })}
-                  className="input appearance-none w-full"
+                  {...register("receiverRegion", {
+                    required: "Please select receiver region",
+                  })}
+                  className="input w-full appearance-none"
                 >
-                  <option value="">Select Warehouse</option>
-                  {getServiceCenters(receiverRegion).map((center) => (
-                    <option key={center} value={center}>
-                      {center}
-                    </option>
-                  ))}
+                  <option value="">Select Region</option>
+                  {regionsData
+                    .map((r) => r.region)
+                    .filter((v, i, a) => a.indexOf(v) === i) // unique regions
+                    .map((region) => (
+                      <option key={region} value={region}>
+                        {region}
+                      </option>
+                    ))}
                 </select>
+                {errors.receiverRegion && (
+                  <p className="text-red-600 text-sm">
+                    {errors.receiverRegion.message}
+                  </p>
+                )}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -390,40 +521,102 @@ const AddParcel = () => {
                   Receiver Address
                 </label>
                 <input
-                  {...register("receiverAddress", { required: true })}
+                  {...register("receiverAddress", {
+                    required: "Receiver address is required",
+                  })}
                   placeholder="Receiver Address"
                   className="input"
                 />
+                {errors.receiverAddress && (
+                  <p className="text-red-600 text-sm">
+                    {errors.receiverAddress.message}
+                  </p>
+                )}
               </div>
               <div className="flex-1">
                 <label className="block text-sm font-medium mb-1">
                   Receiver Contact
                 </label>
                 <input
-                  {...register("receiverContact", { required: true })}
+                  {...register("receiverContact", {
+                    required: "Receiver contact is required",
+                  })}
                   placeholder="Receiver Contact"
                   className="input"
                 />
+                {errors.receiverContact && (
+                  <p className="text-red-600 text-sm">
+                    {errors.receiverContact.message}
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="mt-2 relative">
               <label className="block text-sm font-medium mb-1">
-                Receiver Region
+                Receiver District
               </label>
               <select
-                {...register("receiverRegion", { required: true })}
+                {...register("receiverDistrict", {
+                  required: "Please select receiver district",
+                })}
                 className="input w-full appearance-none"
+                disabled={!receiverDistricts.length}
               >
-                <option value="">Select Region</option>
-                {[...new Set(regionsData.map((r) => r.region))].map(
-                  (region) => (
-                    <option key={region} value={region}>
-                      {region}
-                    </option>
-                  )
-                )}
+                <option value="">Select District</option>
+                {receiverDistricts.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
               </select>
+              {errors.receiverDistrict && (
+                <p className="text-red-600 text-sm">
+                  {errors.receiverDistrict.message}
+                </p>
+              )}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6 absolute right-2 top-8"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                />
+              </svg>
+            </div>
+
+            <div className="mt-2 relative">
+              <label className="block text-sm font-medium mb-1">
+                Delivery Warehouse
+              </label>
+              <select
+                {...register("receiverServiceCenter", {
+                  required: "Please select delivery warehouse",
+                })}
+                className="input appearance-none w-full"
+                disabled={!receiverDistrict}
+              >
+                <option value="">Select Warehouse</option>
+                {receiverDistrict &&
+                  getServiceCenters(receiverRegion, receiverDistrict).map(
+                    (center) => (
+                      <option key={center} value={center}>
+                        {center}
+                      </option>
+                    )
+                  )}
+              </select>
+              {errors.receiverServiceCenter && (
+                <p className="text-red-600 text-sm">
+                  {errors.receiverServiceCenter.message}
+                </p>
+              )}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -445,35 +638,37 @@ const AddParcel = () => {
                 Delivery Instruction
               </label>
               <textarea
-                {...register("deliveryInstruction", { required: true })}
+                {...register("deliveryInstruction", {
+                  required: "Delivery instruction is required",
+                })}
                 placeholder="Delivery Instruction"
                 className="input h-28 lg:h-36 w-full"
               />
+              {errors.deliveryInstruction && (
+                <p className="text-red-600 text-sm">
+                  {errors.deliveryInstruction.message}
+                </p>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center">
           <button
             type="submit"
             className="bg-[#0096db] text-white px-6 py-2 rounded hover:bg-sky-400 mt-4"
           >
             Submit
           </button>
+
+          {/* Show cost if calculated */}
+          {cost !== null && (
+            <p className="mt-4 text-lg font-semibold text-green-700">
+              Estimated Cost: ৳{cost}
+            </p>
+          )}
         </div>
       </form>
-
-      {showConfirm && (
-        <div className="mt-6 p-4 border rounded-lg bg-green-50">
-          <p className="text-green-700 font-medium">Delivery Cost: {cost}৳</p>
-          <button
-            onClick={handleConfirm}
-            className="mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-          >
-            Confirm & Save
-          </button>
-        </div>
-      )}
     </div>
   );
 };

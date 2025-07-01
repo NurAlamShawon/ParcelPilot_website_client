@@ -15,6 +15,9 @@ import Payment from "../Components/Payment/Payment";
 import PaymentHistory from "../Components/Payment/PaymentHistory";
 import TrackParcel from "../Components/TrackParcel/TrackParcel";
 import PrivateRoutes from "./PrivateRoute";
+import RiderForm from "../Components/Rider/RiderForm";
+import PendingRider from "../Components/Rider/PendingRider";
+import ActiveRider from "../Components/Rider/ActiveRider";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: "coverage",
         Component: Coverage,
+      },
+       {
+        path: "be-a-rider",
+       element:<PrivateRoutes><RiderForm></RiderForm></PrivateRoutes>
       },
     ],
   },
@@ -80,6 +87,14 @@ const router = createBrowserRouter([
       {
         path:"track-parcel",
         Component:TrackParcel
+      }, 
+      {
+        path:"pending-riders",
+        Component:PendingRider
+      },
+       {
+        path:"active-riders",
+        Component:ActiveRider
       },
     ]
 

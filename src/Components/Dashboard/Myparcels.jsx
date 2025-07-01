@@ -19,7 +19,7 @@ const Myparcels = () => {
   enabled: !!currentuser?.email, 
     queryFn: async () => {
       const res = await axiosInstance.get(
-        `/payments?email=${currentuser.email}`
+        `/parcels?email=${currentuser.email}`
       );
       return res.data;
     },
