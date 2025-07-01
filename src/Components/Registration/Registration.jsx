@@ -4,21 +4,45 @@ import { auth } from "../../../src/firebase-init";
 import { sendEmailVerification, updateProfile } from "firebase/auth";
 import { ValueContext } from "../../Context/ValueContext";
 import GoogleSignIn from "../GoogleSignIn/GoogleSignIn";
+import axios from "axios";
+import Useaxios from "../../Hooks/Useaxios";
 
 const Registration = () => {
-  const { signupwithemail } = useContext(ValueContext);
+  const { signupwithemail  } = useContext(ValueContext);
   const [eye, seteye] = useState(false);
+
+  const axiosInstance=Useaxios()
   const [error, seterror] = useState("");
   const navigate = useNavigate();
 
-  const createaccountwithpassword = (e) => {
+  const createaccountwithpassword = async (e) => {
     e.preventDefault();
 
     const email = e.target.email.value;
     const name = e.target.name.value;
     const password = e.target.password.value;
-    const photo = e.target.photo.value;
+
     const check = e.target.check.checked;
+
+    const photo = e.target.photo.files[0];
+    if (!photo) {
+      seterror("Please select a photo.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", photo);
+
+    const res = await axios.post(
+      `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_image_upload_key
+      }`,formData
+    );
+const url = res.data.data.url;
+console.log("Uploaded image URL:", url); 
+
+// If you still want to set it:
+// setpic(url);
 
     seterror("");
 
@@ -37,7 +61,24 @@ const Registration = () => {
     }
 
     signupwithemail(email, password)
-      .then(() => {
+      .then(async() => {
+
+
+//save in the database
+        const userInfo={
+          name: name,
+          email: email,
+          role:'user',
+          created_At: new Date().toISOString(),
+          last_log_in:new Date().toISOString()
+
+        }
+
+const res= await axiosInstance.post('/users',userInfo);
+console.log(res)
+
+
+
         // const user = userCredential.user;
         // console.log(user);
         // verification code
@@ -53,10 +94,12 @@ const Registration = () => {
         // update user
         updateProfile(auth.currentUser, {
           displayName: name,
-          photoURL: photo,
+          photoURL: url,
+          
         })
           .then(() => {
             // console.log("profile updated", result);
+             
           })
           .catch((error) => {
             console.log(error);
@@ -82,7 +125,9 @@ const Registration = () => {
             <h1 className="font-semibold text-2xl text-center">
               Create an Account
             </h1>
-            <p className="text-base text-center text-gray-400">Register with ParcelPilot</p>
+            <p className="text-base text-center text-gray-400">
+              Register with ParcelPilot
+            </p>
             <div className="border-1 border-gray-200 mx-2"></div>
             <label for="name">Your Name</label>
             <br></br>

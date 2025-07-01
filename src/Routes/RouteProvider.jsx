@@ -13,6 +13,8 @@ import DashBoardLayout from "../Layouts/DashBoardLayout";
 import Myparcels from "../Components/Dashboard/Myparcels";
 import Payment from "../Components/Payment/Payment";
 import PaymentHistory from "../Components/Payment/PaymentHistory";
+import TrackParcel from "../Components/TrackParcel/TrackParcel";
+import PrivateRoutes from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -25,16 +27,9 @@ const router = createBrowserRouter([
       },
       {
         path: "add-parcel",
-        Component: AddParcel,
+       element:<PrivateRoutes><AddParcel></AddParcel></PrivateRoutes>
       },
-      // {
-      //   path: "view-booking",
-      //   Component: Home,
-      // },
-      {
-        path: "track-parcel",
-        Component: Home,
-      },
+    
       {
         path: "coverage",
         Component: Coverage,
@@ -69,7 +64,7 @@ const router = createBrowserRouter([
   },
   {
     path:"dashboard",
-    Component:DashBoardLayout,
+    element:<PrivateRoutes><DashBoardLayout></DashBoardLayout></PrivateRoutes>,
     children:[
       {
         index:true,Component:Myparcels
@@ -81,6 +76,10 @@ const router = createBrowserRouter([
       {
         path:"payment-history",
         Component:PaymentHistory
+      },
+      {
+        path:"track-parcel",
+        Component:TrackParcel
       },
     ]
 

@@ -14,7 +14,7 @@ const PaymentHistory = () => {
     error,
   } = useQuery({
     queryKey: ["user-payments", currentuser?.email],
-    enabled: !!currentuser?.email, // only run if email exists
+    enabled: !!currentuser?.email, 
     queryFn: async () => {
       const res = await axiosInstance.get(
         `/payments?email=${currentuser.email}`

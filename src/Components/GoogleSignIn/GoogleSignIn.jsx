@@ -1,15 +1,35 @@
 import React, { useContext } from "react";
 import {ValueContext} from "../../Context/ValueContext";
 import { useLocation, useNavigate } from "react-router";
+import Useaxios from "../../Hooks/Useaxios";
 
 const GoogleSignIn = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { signupwithgoogle } = useContext(ValueContext);
+  const axiosInstance=Useaxios()
 
   const loginwithgoogle = () => {
     signupwithgoogle()
-      .then(() => {
+      .then(async(result) => {
+
+
+//save in the database
+        const userInfo={
+          name: result.user.displayName,
+          email: result.user.email,
+          role:'user',
+          created_At: new Date().toISOString(),
+          last_log_in:new Date().toISOString()
+
+        }
+
+const res= await axiosInstance.post('/users',userInfo);
+console.log(res)
+
+
+
+
         // console.log("login successfully",result)
         navigate(location?.state || "/");
       })

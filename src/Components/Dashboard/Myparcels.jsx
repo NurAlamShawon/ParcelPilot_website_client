@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { ValueContext } from "../../Context/ValueContext";
-import useAxiosSecure from "../../Hooks/UseaxiosSecure";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
+import useAxiosSecure from "../../Hooks/UseaxiosSecure";
+
 
 
 const Myparcels = () => {
@@ -13,13 +14,26 @@ const Myparcels = () => {
   console.log(currentuser);
   const axiosInstance = useAxiosSecure();
 
-  const { data: parcels = [] } = useQuery({
-    queryKey: ["my-parcels", currentuser.email],
+ const { data: parcels = [], isLoading } = useQuery({
+  queryKey: ["my-parcels", currentuser?.email],
+  enabled: !!currentuser?.email, 
     queryFn: async () => {
-      const res = await axiosInstance.get(`/parcels?email=${currentuser.user}`);
+      const res = await axiosInstance.get(
+        `/payments?email=${currentuser.email}`
+      );
       return res.data;
     },
-  });
+});
+
+
+ if (isLoading) {
+    return <div className="text-center mt-10">Loading parcels...</div>;
+  }
+
+  if (!currentuser) {
+  return <div className="text-center mt-10">Loading parcels...</div>;
+}
+
 
   const onDelete= id=>{
      Swal.fire({
