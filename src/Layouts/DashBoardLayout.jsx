@@ -139,7 +139,7 @@ const DashBoardLayout = () => {
             </Link>
           </li>
           <li>
-            <Link to="pending-riders">
+            <Link to="active-riders">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
