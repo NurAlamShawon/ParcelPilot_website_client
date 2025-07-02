@@ -155,6 +155,7 @@ const AddParcel = () => {
           email: currentuser.email,
           tracking_id: generateTrackingId(data.senderRegion),
           payment_status: "unpaid",
+          delivery_status: "not-collected",
         };
 
         axiosInstance

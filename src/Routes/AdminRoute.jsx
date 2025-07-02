@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ValueContext } from '../Context/ValueContext';
-import { useLocation } from 'react-router';
+import { Navigate, useLocation } from 'react-router';
 import UseUserRole from '../Hooks/UseuserRole';
 
 const AdminRoute = ({children}) => {

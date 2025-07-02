@@ -41,8 +41,8 @@ const Login = () => {
           auth.signOut();
           return;
         }
-       
-         navigate(from);
+
+        navigate(from);
         // Continue with login if verified
         // console.log("Login successful and email verified", user);
         // Set success state, redirect, etc.
@@ -164,23 +164,6 @@ const Login = () => {
               className="text-white btn bg-primary w-full"
             />
             <br></br>
-            <div className="flex w-full flex-col">
-              <div>
-                {" "}
-                <p className="font-semibold text-base text-black text-center">
-                  Don't Have An Account?
-                  <Link to="registration" state={{from}} className="text-[#f77b33] pl-2">
-                    Registration
-                  </Link>{" "}
-                </p>
-              </div>
-              <div className="divider">OR</div>
-
-              <div>
-                {" "}
-                <GoogleSignIn></GoogleSignIn>
-              </div>
-            </div>
 
             <div>
               <span className="text-base text-red-500">
@@ -188,6 +171,27 @@ const Login = () => {
               </span>
             </div>
           </form>
+          <div className="flex w-full flex-col">
+            <div>
+              {" "}
+              <p className="font-semibold text-base text-black text-center">
+                Don't Have An Account?
+                <Link
+                  to="registration"
+                  state={{ from }}
+                  className="text-[#f77b33] pl-2"
+                >
+                  Registration
+                </Link>{" "}
+              </p>
+            </div>
+            <div className="divider">OR</div>
+
+            <div>
+              {" "}
+              <GoogleSignIn></GoogleSignIn>
+            </div>
+          </div>
         </div>
       </div>
       <div className="xl:w-1/2 w-full bg-[#FAFDF0] border-2 border-gray-200">

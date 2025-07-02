@@ -1,15 +1,15 @@
 import React, { useContext } from "react";
 import {ValueContext} from "../../Context/ValueContext";
 import { useLocation, useNavigate } from "react-router";
-import Useaxios from "../../Hooks/Useaxios";
 import { sendEmailVerification } from "firebase/auth/cordova";
 import { auth } from "../../firebase-init";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
 
 const GoogleSignIn = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { signupwithgoogle } = useContext(ValueContext);
-  const axiosInstance=Useaxios()
+  const axiosInstance=useAxiosSecure()
 
   const loginwithgoogle = () => {
     signupwithgoogle()

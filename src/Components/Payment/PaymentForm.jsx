@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useContext, useState } from "react";
 import { ValueContext } from "../../Context/ValueContext";
 import Swal from "sweetalert2";
-import useAxiosSecure from "../../Hooks/UseaxiosSecure";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
 
 const PaymentForm = ({ id }) => {
   const parcel_id = id;

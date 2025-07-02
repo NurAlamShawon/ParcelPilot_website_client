@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Useaxios from "../../Hooks/Useaxios";
+
 import Swal from "sweetalert2";
 import { FaSearch } from "react-icons/fa";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
 
 const MakeAdmin = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTrigger, setSearchTrigger] = useState(""); // Triggers query
-  const axiosInstance = Useaxios();
+  const axiosInstance = useAxiosSecure();
   const queryClient = useQueryClient();
 
   // Search when searchTrigger updates

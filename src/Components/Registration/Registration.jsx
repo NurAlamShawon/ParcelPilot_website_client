@@ -5,15 +5,15 @@ import { sendEmailVerification, updateProfile } from "firebase/auth";
 import { ValueContext } from "../../Context/ValueContext";
 import GoogleSignIn from "../GoogleSignIn/GoogleSignIn";
 import axios from "axios";
-import Useaxios from "../../Hooks/Useaxios";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+
 
 const Registration = () => {
   const { signupwithemail } = useContext(ValueContext);
   const [eye, seteye] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from || "/";
-  const axiosInstance = Useaxios();
+  const axiosInstance = useAxiosSecure();
   const [error, seterror] = useState("");
 
   const createaccountwithpassword = async (e) => {
@@ -95,7 +95,7 @@ const Registration = () => {
         })
           .then(() => {
             // console.log("profile updated", result);
-            navigate(from);
+            navigate(location?.state || "/");
           })
           .catch((error) => {
             console.log(error);

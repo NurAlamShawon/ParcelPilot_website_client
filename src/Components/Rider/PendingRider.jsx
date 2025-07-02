@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import Swal from "sweetalert2";
-import useAxiosSecure from "../../Hooks/UseaxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { ValueContext } from "../../Context/ValueContext";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
 
 const PendingRider = () => {
-  const axiosSecure = useAxiosSecure();
+const axiosInstance=useAxiosSecure();
   const { currentuser } = useContext(ValueContext);
 
   const [selectedRider, setSelectedRider] = useState(null);
@@ -17,7 +17,7 @@ const PendingRider = () => {
   } = useQuery({
     queryKey: ["rider-pendings"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/riders/pending");
+      const res = await axiosInstance.get("/riders/pending");
       return res.data;
     },
   });
@@ -34,7 +34,7 @@ const PendingRider = () => {
     });
     if (!confirm.isConfirmed) return;
 
-    await axiosSecure.patch(`/riders/${id}/status`, { status, email });
+    await axiosInstance.patch(`/riders/${id}/status`, { status, email });
     refetch();
     Swal.fire("Success", `Rider has been ${status}`, "success");
   };

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../Hooks/UseaxiosSecure";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
 
 const ActiveRider = () => {
-  const axiosSecure = useAxiosSecure();
+  const axiosInstance = useAxiosSecure();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRider, setSelectedRider] = useState(null);
 
@@ -14,7 +14,7 @@ const ActiveRider = () => {
   } = useQuery({
     queryKey: ["active-riders"],
     queryFn: async () => {
-      const res = await axiosSecure.get("/riders/accepted");
+      const res = await axiosInstance.get("/riders/accepted");
       return res.data;
     },
   });

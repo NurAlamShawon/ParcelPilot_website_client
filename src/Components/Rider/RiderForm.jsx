@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { ValueContext } from "../../Context/ValueContext";
 import Swal from "sweetalert2";
-import useAxiosSecure from "../../Hooks/UseaxiosSecure";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
 
 const RiderForm = () => {
   const {
