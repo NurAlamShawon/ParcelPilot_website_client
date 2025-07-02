@@ -10,7 +10,7 @@ const ActiveRider = () => {
   const {
     data: activeRiders = [],
     isLoading,
-    refetch,
+    // refetch,
   } = useQuery({
     queryKey: ["active-riders"],
     queryFn: async () => {

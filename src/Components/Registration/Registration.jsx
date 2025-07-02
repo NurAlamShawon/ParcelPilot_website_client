@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { auth } from "../../../src/firebase-init";
 import { sendEmailVerification, updateProfile } from "firebase/auth";
 import { ValueContext } from "../../Context/ValueContext";
@@ -8,12 +8,13 @@ import axios from "axios";
 import Useaxios from "../../Hooks/Useaxios";
 
 const Registration = () => {
-  const { signupwithemail  } = useContext(ValueContext);
+  const { signupwithemail } = useContext(ValueContext);
   const [eye, seteye] = useState(false);
-
-  const axiosInstance=Useaxios()
-  const [error, seterror] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || "/";
+  const axiosInstance = Useaxios();
+  const [error, seterror] = useState("");
 
   const createaccountwithpassword = async (e) => {
     e.preventDefault();
@@ -36,13 +37,14 @@ const Registration = () => {
     const res = await axios.post(
       `https://api.imgbb.com/1/upload?key=${
         import.meta.env.VITE_image_upload_key
-      }`,formData
+      }`,
+      formData
     );
-const url = res.data.data.url;
-console.log("Uploaded image URL:", url); 
+    const url = res.data.data.url;
+    console.log("Uploaded image URL:", url);
 
-// If you still want to set it:
-// setpic(url);
+    // If you still want to set it:
+    // setpic(url);
 
     seterror("");
 
@@ -61,23 +63,18 @@ console.log("Uploaded image URL:", url);
     }
 
     signupwithemail(email, password)
-      .then(async() => {
-
-
-//save in the database
-        const userInfo={
+      .then(async () => {
+        //save in the database
+        const userInfo = {
           name: name,
           email: email,
-          role:'user',
+          role: "user",
           created_At: new Date().toISOString(),
-          last_log_in:new Date().toISOString()
+          last_log_in: new Date().toISOString(),
+        };
 
-        }
-
-const res= await axiosInstance.post('/users',userInfo);
-console.log(res)
-
-
+        const res = await axiosInstance.post("/users", userInfo);
+        console.log(res);
 
         // const user = userCredential.user;
         // console.log(user);
@@ -95,18 +92,15 @@ console.log(res)
         updateProfile(auth.currentUser, {
           displayName: name,
           photoURL: url,
-          
         })
           .then(() => {
             // console.log("profile updated", result);
-             
+            navigate(from);
           })
           .catch((error) => {
             console.log(error);
             seterror(error.message);
           });
-
-        navigate("/");
       })
       .catch((error) => {
         console.log(error);

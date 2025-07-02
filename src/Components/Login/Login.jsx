@@ -11,6 +11,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [email, setemail] = useState("");
+  const from = location?.state || "/";
 
   const handlelogin = (e) => {
     e.preventDefault();
@@ -40,8 +41,8 @@ const Login = () => {
           auth.signOut();
           return;
         }
-        navigate(location?.state || "/");
-
+       
+         navigate(from);
         // Continue with login if verified
         // console.log("Login successful and email verified", user);
         // Set success state, redirect, etc.
@@ -168,7 +169,7 @@ const Login = () => {
                 {" "}
                 <p className="font-semibold text-base text-black text-center">
                   Don't Have An Account?
-                  <Link to="registration" className="text-[#f77b33] pl-2">
+                  <Link to="registration" state={{from}} className="text-[#f77b33] pl-2">
                     Registration
                   </Link>{" "}
                 </p>

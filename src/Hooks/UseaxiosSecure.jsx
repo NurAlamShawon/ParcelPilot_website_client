@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useContext } from "react";
 import { ValueContext } from "../Context/ValueContext";
+import { Navigate } from "react-router";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3000",
@@ -26,7 +27,8 @@ const useAxiosSecure = () => {
  return res;
   },error=>{
     if(error.response?.status === 401 || error.response?.status === 403){
-     signout().then(()=>{console.log("Signout For Status 401")})
+     signout().then(()=>{console.log("Signout For Status 401")});
+     Navigate('/forbidden')
     }
     
   });

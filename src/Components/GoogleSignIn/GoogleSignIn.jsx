@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import {ValueContext} from "../../Context/ValueContext";
 import { useLocation, useNavigate } from "react-router";
 import Useaxios from "../../Hooks/Useaxios";
+import { sendEmailVerification } from "firebase/auth/cordova";
+import { auth } from "../../firebase-init";
 
 const GoogleSignIn = () => {
   const navigate = useNavigate();
@@ -12,6 +14,14 @@ const GoogleSignIn = () => {
   const loginwithgoogle = () => {
     signupwithgoogle()
       .then(async(result) => {
+         sendEmailVerification(auth.currentUser)
+                  .then(() => {
+                    alert("Verification email sent. Please check your inbox.");
+                    // Optionally sign out the user until they verify
+                  })
+                  .catch((err) => {
+                    console.log("Email verification error:", err);
+                  });
   navigate(location?.state || "/");
 
 //save in the database

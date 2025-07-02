@@ -1,31 +1,32 @@
-import React, {   useState } from "react";
+import React, { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../Hooks/UseaxiosSecure";
 import { useQuery } from "@tanstack/react-query";
+import { ValueContext } from "../../Context/ValueContext";
 
 const PendingRider = () => {
   const axiosSecure = useAxiosSecure();
+  const { currentuser } = useContext(ValueContext);
 
-  
   const [selectedRider, setSelectedRider] = useState(null);
 
+  const {
+    isPending,
+    data: Pendings = [],
+    refetch,
+  } = useQuery({
+    queryKey: ["rider-pendings"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/riders/pending");
+      return res.data;
+    },
+  });
 
-
-
-const {isPending,data:Pendings=[],refetch}=useQuery({
-  queryKey:['rider-pendings'],
-  queryFn:async()=>{
-    const res=await axiosSecure.get('/riders/pending');
-    return res.data
+  if (isPending) {
+    return <p className="text-center">Data is Coming...</p>;
   }
-})
 
-if(isPending){
-  return <p className="text-center">Data is Coming...</p>
-}
-
-
-  const handleStatusUpdate = async (id, status) => {
+  const handleStatusUpdate = async (id, status, email) => {
     const confirm = await Swal.fire({
       title: `Confirm to ${status}?`,
       showCancelButton: true,
@@ -33,8 +34,8 @@ if(isPending){
     });
     if (!confirm.isConfirmed) return;
 
-    await axiosSecure.patch(`/riders/${id}/status`, { status });
-   refetch()
+    await axiosSecure.patch(`/riders/${id}/status`, { status, email });
+    refetch();
     Swal.fire("Success", `Rider has been ${status}`, "success");
   };
 
@@ -77,13 +78,17 @@ if(isPending){
                       View
                     </button>
                     <button
-                      onClick={() => handleStatusUpdate(rider._id, "accepted")}
+                      onClick={() =>
+                        handleStatusUpdate(rider._id, "accepted", currentuser.email)
+                      }
                       className="px-2 py-1 btn btn-success text-white rounded"
                     >
                       Accept
                     </button>
                     <button
-                      onClick={() => handleStatusUpdate(rider._id, "rejected")}
+                      onClick={() =>
+                        handleStatusUpdate(rider._id, "rejected", currentuser.email)
+                      }
                       className="px-2 py-1 btn btn-error text-white rounded"
                     >
                       Reject

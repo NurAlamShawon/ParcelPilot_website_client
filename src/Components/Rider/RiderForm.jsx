@@ -129,9 +129,10 @@ const RiderForm = () => {
           <div>
             <label className="block text-sm font-medium mb-1">Your Email</label>
             <input
-              type="email"
+              type={currentuser.email}
               {...register("email", { required: true })}
               placeholder="Your Email"
+              value={currentuser.email}
               className="w-full border px-4 py-2 rounded"
             />
             {errors.email && (
