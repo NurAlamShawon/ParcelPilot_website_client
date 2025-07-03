@@ -64,12 +64,11 @@ const Navbar = () => {
                   <NavLink to={"/dashboard"}>Dashboard</NavLink>
                 </li>
               )}
-
               <li>
-                <NavLink to={"/be-a-rider"}>Coverage</NavLink>
+                <NavLink to={"/be-a-rider"}>Be A Rider</NavLink>
               </li>
               <li>
-                <NavLink to={"/coverage"}>Coverage</NavLink>
+                <NavLink to={"/be-a-rider"}>Coverage</NavLink>
               </li>
             </ul>
           </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+import useAxiosSecure from "../../Hooks/UseaxiosSecure";
 
 const ActiveRider = () => {
   const axiosInstance = useAxiosSecure();
@@ -40,7 +40,8 @@ const ActiveRider = () => {
         onChange={(e) => setSearchQuery(e.target.value)}
       />
 
-      <div className="overflow-x-auto">
+      {/* Table for md and above */}
+      <div className="overflow-x-auto hidden md:block">
         <table className="min-w-full table-auto border border-gray-200 text-sm">
           <thead className="bg-gray-100 text-left">
             <tr>
@@ -69,10 +70,10 @@ const ActiveRider = () => {
                   <td className="px-4 py-2 border">{rider.warehouse}</td>
                   <td className="px-4 py-2 border text-center">
                     <button
-                      onClick={() =>
-                        document.getElementById("rider_modal").showModal() ||
-                        setSelectedRider(rider)
-                      }
+                      onClick={() => {
+                        document.getElementById("rider_modal").showModal();
+                        setSelectedRider(rider);
+                      }}
                       className="text-blue-600 hover:underline"
                     >
                       View
@@ -83,6 +84,43 @@ const ActiveRider = () => {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Card/List view for mobile */}
+      <div className="block md:hidden space-y-4">
+        {filteredRiders.length === 0 ? (
+          <p className="text-center text-gray-500">No active riders found.</p>
+        ) : (
+          filteredRiders.map((rider) => (
+            <div
+              key={rider._id}
+              className="border rounded-lg p-4 shadow hover:shadow-lg transition cursor-pointer"
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="font-semibold text-lg">{rider.name}</h3>
+                  <p className="text-gray-600 text-sm">{rider.email}</p>
+                  <p className="text-gray-600 text-sm">{rider.contact}</p>
+                  <p className="text-gray-600 text-sm">
+                    Region: {rider.region}
+                  </p>
+                  <p className="text-gray-600 text-sm">
+                    Warehouse: {rider.warehouse}
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    document.getElementById("rider_modal").showModal();
+                    setSelectedRider(rider);
+                  }}
+                  className="text-blue-600 hover:underline whitespace-nowrap self-start"
+                >
+                  View
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {/* Rider Detail Modal */}
