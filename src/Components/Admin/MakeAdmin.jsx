@@ -5,10 +5,11 @@ import Swal from "sweetalert2";
 import { FaSearch } from "react-icons/fa";
 import useAxiosSecure from "../../Hooks/UseAxiosSecure";
 
+
 const MakeAdmin = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTrigger, setSearchTrigger] = useState(""); // Triggers query
-  const axiosInstance = useAxiosSecure();
+  const axiosInstance =useAxiosSecure();
   const queryClient = useQueryClient();
 
   // Search when searchTrigger updates

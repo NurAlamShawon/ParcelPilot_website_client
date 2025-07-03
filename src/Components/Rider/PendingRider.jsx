@@ -1,12 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, {  useState } from "react";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
-import { ValueContext } from "../../Context/ValueContext";
-import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+import useAxiosSecure from "../../Hooks/UseaxiosSecure";
+
 
 const PendingRider = () => {
 const axiosInstance=useAxiosSecure();
-  const { currentuser } = useContext(ValueContext);
+
 
   const [selectedRider, setSelectedRider] = useState(null);
 
@@ -79,7 +79,7 @@ const axiosInstance=useAxiosSecure();
                     </button>
                     <button
                       onClick={() =>
-                        handleStatusUpdate(rider._id, "accepted", currentuser.email)
+                        handleStatusUpdate(rider._id, "accepted", rider.email)
                       }
                       className="px-2 py-1 btn btn-success text-white rounded"
                     >
@@ -87,7 +87,7 @@ const axiosInstance=useAxiosSecure();
                     </button>
                     <button
                       onClick={() =>
-                        handleStatusUpdate(rider._id, "rejected", currentuser.email)
+                        handleStatusUpdate(rider._id, "rejected", rider.email)
                       }
                       className="px-2 py-1 btn btn-error text-white rounded"
                     >

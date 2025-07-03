@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../Hooks/UseaxiosSecure";
 
 const AssignRider = () => {
   const axiosInstance = useAxiosSecure();
@@ -34,11 +34,12 @@ const AssignRider = () => {
     enabled: !!selectedDistrict,
   });
 
-  // Mutation: Assign rider to parcel
+  // // Mutation: Assign rider to parcel
   const assignMutation = useMutation({
-    mutationFn: async ({ parcelId, riderId }) => {
+    mutationFn: async ({ parcelId, riderId,email }) => {
       return axiosInstance.patch(`/parcels/assign/${parcelId}`, {
         rider_id: riderId,
+        rider_email:email
       });
     },
     onSuccess: () => {
@@ -52,7 +53,7 @@ const AssignRider = () => {
     setSelectedDistrict(parcel.senderDistrict);
   };
 
-  const handleAssign = async (riderId, riderName) => {
+  const handleAssign = async (riderId, riderName,rider_email) => {
     const confirm = await Swal.fire({
       title: "Confirm Assignment",
       text: `Are you sure you want to assign ${riderName} to this parcel?`,
@@ -68,6 +69,7 @@ const AssignRider = () => {
       await axiosInstance.patch(`/parcels/${selectedParcel._id}/assign`, {
         riderId,
         ridername: riderName,
+        rider_email:rider_email
       });
 
       toast.success("Rider assigned successfully!");
@@ -159,7 +161,7 @@ const AssignRider = () => {
                       <button
                         className="btn btn-success btn-sm"
                         disabled={assignMutation.isPending}
-                        onClick={() => handleAssign(rider._id, rider.name)}
+                        onClick={() => handleAssign(rider._id, rider.name,rider.email)}
                       >
                         {assignMutation.isPending ? "Assigning..." : "Assign"}
                       </button>

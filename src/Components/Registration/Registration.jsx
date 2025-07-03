@@ -5,7 +5,7 @@ import { sendEmailVerification, updateProfile } from "firebase/auth";
 import { ValueContext } from "../../Context/ValueContext";
 import GoogleSignIn from "../GoogleSignIn/GoogleSignIn";
 import axios from "axios";
-import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+import Useaxios from "../../Hooks/Useaxios";
 
 
 const Registration = () => {
@@ -13,7 +13,7 @@ const Registration = () => {
   const [eye, seteye] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const axiosInstance = useAxiosSecure();
+  const axiosInstance = Useaxios();
   const [error, seterror] = useState("");
 
   const createaccountwithpassword = async (e) => {

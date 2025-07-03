@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import axios from "axios";
+import Useaxios from "../../Hooks/Useaxios";
+
 
 const TrackParcel = () => {
+  const axiosInstance=Useaxios();
   const [trackingId, setTrackingId] = useState("");
   const [updates, setUpdates] = useState([]);
   const [error, setError] = useState("");
 
   const handleSearch = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/trackings/${trackingId}`);
+      const res = await axiosInstance.get(`/trackings/${trackingId}`);
       if (res.data.length === 0) {
         setError("No tracking updates found.");
         setUpdates([]);

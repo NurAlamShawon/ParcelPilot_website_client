@@ -22,6 +22,11 @@ import MakeAdmin from "../Components/Admin/MakeAdmin";
 import Forbidden from "../Components/Forbidden/Forbidden";
 import AdminRoute from "./AdminRoute";
 import AssignRider from "../Components/AssignRider/AssignRider";
+import PendingDeliveries from "../Components/PendingDeliveries/PendingDeliveries";
+import RiderRoute from "./RiderRoute";
+import MyCompletedDeliveries from "../Components/MyCompletedDeliveries/MyCompletedDeliveries";
+import RiderEarningsSummary from "../Components/Rider/RiderEarningsSummary";
+import Dashboard from "../Components/Dashboard/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -34,19 +39,28 @@ const router = createBrowserRouter([
       },
       {
         path: "add-parcel",
-       element:<PrivateRoutes><AddParcel></AddParcel></PrivateRoutes>
+        element: (
+          <PrivateRoutes>
+            <AddParcel></AddParcel>
+          </PrivateRoutes>
+        ),
       },
-    
+
       {
         path: "coverage",
         Component: Coverage,
       },
-       {
+      {
         path: "be-a-rider",
-       element:<PrivateRoutes><RiderForm></RiderForm></PrivateRoutes>
-      }, {
+        element: (
+          <PrivateRoutes>
+            <RiderForm></RiderForm>
+          </PrivateRoutes>
+        ),
+      },
+      {
         path: "forbidden",
-       element:<Forbidden></Forbidden>
+        element: <Forbidden></Forbidden>,
       },
     ],
   },
@@ -77,42 +91,90 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path:"dashboard",
-    element:<PrivateRoutes><DashBoardLayout></DashBoardLayout></PrivateRoutes>,
-    children:[
+    path: "dashboard",
+    element: (
+      <PrivateRoutes>
+        <DashBoardLayout></DashBoardLayout>
+      </PrivateRoutes>
+    ),
+    children: [
       {
-        index:true,Component:Myparcels
-      },
-      {
-        path:"payment/:id",
-        Component:Payment
-      },
-      {
-        path:"payment-history",
-        Component:PaymentHistory
+        index: true,
+        Component: Dashboard,
       },
       {
-        path:"track-parcel",
-        Component:TrackParcel
-      }, 
+        path: "myparcels",
+        Component: Myparcels,
+      },
       {
-        path:"pending-riders",
-        element:<AdminRoute><PendingRider></PendingRider></AdminRoute>
+        path: "payment/:id",
+        Component: Payment,
       },
-       {
-        path:"active-riders",
-       element:<AdminRoute><ActiveRider></ActiveRider></AdminRoute>
+      {
+        path: "payment-history",
+        Component: PaymentHistory,
       },
-       {
-        path:"make-admin",
-       element:<AdminRoute><MakeAdmin></MakeAdmin></AdminRoute>
+      {
+        path: "track-parcel",
+        Component: TrackParcel,
       },
-       {
-        path:"assing-rider",
-       element:<AdminRoute><AssignRider></AssignRider></AdminRoute>
+      {
+        path: "pending-riders",
+        element: (
+          <AdminRoute>
+            <PendingRider></PendingRider>
+          </AdminRoute>
+        ),
       },
-    ]
-
+      {
+        path: "active-riders",
+        element: (
+          <AdminRoute>
+            <ActiveRider></ActiveRider>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "make-admin",
+        element: (
+          <AdminRoute>
+            <MakeAdmin></MakeAdmin>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "assing-rider",
+        element: (
+          <AdminRoute>
+            <AssignRider></AssignRider>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "pending-deliveries",
+        element: (
+          <RiderRoute>
+            <PendingDeliveries></PendingDeliveries>
+          </RiderRoute>
+        ),
+      },
+      {
+        path: "completed-deliveries",
+        element: (
+          <RiderRoute>
+            <MyCompletedDeliveries></MyCompletedDeliveries>
+          </RiderRoute>
+        ),
+      },
+      {
+        path: "earning-summary",
+        element: (
+          <RiderRoute>
+            <RiderEarningsSummary></RiderEarningsSummary>
+          </RiderRoute>
+        ),
+      },
+    ],
   },
 ]);
 

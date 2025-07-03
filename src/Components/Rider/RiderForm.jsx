@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import { ValueContext } from "../../Context/ValueContext";
 import Swal from "sweetalert2";
-import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+import Useaxios from "../../Hooks/Useaxios";
 
 const RiderForm = () => {
   const {
@@ -12,7 +12,7 @@ const RiderForm = () => {
     reset,
     formState: { errors },
   } = useForm();
-  const axiosInstance = useAxiosSecure();
+  const axiosInstance = Useaxios();
   const { currentuser } = useContext(ValueContext);
 
   const [coverageData, setCoverageData] = useState([]);

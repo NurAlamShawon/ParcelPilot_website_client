@@ -1,47 +1,42 @@
 import React, { useContext } from "react";
-import {ValueContext} from "../../Context/ValueContext";
+import { ValueContext } from "../../Context/ValueContext";
 import { useLocation, useNavigate } from "react-router";
 import { sendEmailVerification } from "firebase/auth/cordova";
 import { auth } from "../../firebase-init";
-import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+import Useaxios from "../../Hooks/Useaxios";
 
 const GoogleSignIn = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { signupwithgoogle } = useContext(ValueContext);
-  const axiosInstance=useAxiosSecure()
+  const axiosInstance = Useaxios();
 
   const loginwithgoogle = () => {
     signupwithgoogle()
-      .then(async(result) => {
-         sendEmailVerification(auth.currentUser)
-                  .then(() => {
-                    alert("Verification email sent. Please check your inbox.");
-                    // Optionally sign out the user until they verify
-                  })
-                  .catch((err) => {
-                    console.log("Email verification error:", err);
-                  });
-  navigate(location?.state || "/");
-
-//save in the database
-        const userInfo={
+      .then(async (result) => {
+        sendEmailVerification(auth.currentUser)
+          .then(() => {
+            alert("Verification email sent. Please check your inbox.");
+            // Optionally sign out the user until they verify
+          })
+          .catch((err) => {
+            console.log("Email verification error:", err);
+          });
+        //save in the database
+        const userInfo = {
           name: result.user.displayName,
           email: result.user.email,
-          role:'user',
+          role: "user",
           created_At: new Date().toISOString(),
-          last_log_in:new Date().toISOString()
+          last_log_in: new Date().toISOString(),
+        };
 
-        }
+        const res = await axiosInstance.post("/users", userInfo);
+        console.log(res);
 
-const res= await axiosInstance.post('/users',userInfo);
-console.log(res)
-
-
-
+        navigate(location?.state || "/");
 
         // console.log("login successfully",result)
-      
       })
       .catch((error) => {
         // Handle Errors here.
