@@ -1,12 +1,32 @@
-# React + Vite
+📌 Project Overview
+ParcelPilot is a web-based courier tracking and parcel management system designed to simplify parcel delivery operations. <br>
+The frontend is built using modern React practices with role-based interfaces for Admin, Customer, and Delivery Agents (Riders). <br>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🧩 Features (Client Side)
+👤 Customer <br>
+• Register/Login with JWT-based auth <br>
+• Send parcel form with pickup & delivery info <br>
+• Prepaid parcel booking using Stripe <br>
+• View and track booked parcels <br>
+• See payment and transaction history <br>
 
-Currently, two official plugins are available:
+🚴 Rider <br>
+• Apply as a delivery agent <br>
+• Login with role-based dashboard <br>
+• View assigned deliveries <br>
+• Update parcel status (Picked, In Transit, Delivered) <br>
+• View earnings & completed deliveries <br>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🛠️ Admin <br>
+• Dashboard with key metrics (bookings, earnings, delivery status) <br>
+• Approve/reject rider applications <br>
+• Assign riders to parcels <br>
+• Manage users and bookings <br>
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+🛠 Tech Stack
+• React.js + React Router DOM <br>
+• Tailwind CSS + DaisyUI <br>
+• Context API for global state <br>
+• TanStack React Query for data caching <br>
+• Stripe.js for payment integration <br>
+• Leaflet.js for map tracking <br>
