@@ -33,8 +33,8 @@ The frontend is built using modern React practices with role-based interfaces fo
 
 
 
-🔄 Workflows
-• 👤 User Workflow
+🔄 Workflows<br>
+• 👤 User Workflow<br>
 Users log in using their email and password. <br>
 After logging in, they can access and complete the "Send Parcel" form. <br>
 To proceed, they must complete a prepaid payment via Stripe. <br>
