@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router";
 import { ValueContext } from "../../Context/ValueContext";
 import ParcelpilotLogo from "../ParcelpilotLogo/ParcelpilotLogo";
+import UseUserRole from "../../Hooks/UseuserRole";
 
 const Navbar = () => {
   const { currentuser, signout } = useContext(ValueContext);
+  const { role } = UseUserRole();
 
   const hanglegotologin = () => {
     signout();
@@ -64,9 +66,14 @@ const Navbar = () => {
                   <NavLink to={"/dashboard"}>Dashboard</NavLink>
                 </li>
               )}
-              <li>
-                <NavLink to={"/be-a-rider"}>Be A Rider</NavLink>
-              </li>
+              {role === "rider" ?"": (
+                <>
+                  <li>
+                    <NavLink to={"/be-a-rider"}>Be A Rider</NavLink>
+                  </li>
+                </>
+              )}
+
               <li>
                 <NavLink to={"/be-a-rider"}>Coverage</NavLink>
               </li>
@@ -87,9 +94,13 @@ const Navbar = () => {
                 <NavLink to={"/dashboard"}>Dashboard</NavLink>
               </li>
             )}
-            <li>
-              <NavLink to={"/be-a-rider"}>Be A Rider</NavLink>
-            </li>
+           {role === "rider" ?"": (
+                <>
+                  <li>
+                    <NavLink to={"/be-a-rider"}>Be A Rider</NavLink>
+                  </li>
+                </>
+              )}
             <li>
               <NavLink to={"/coverage"}>Coverage</NavLink>
             </li>
