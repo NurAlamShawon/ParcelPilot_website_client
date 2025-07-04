@@ -4,8 +4,6 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../Hooks/UseAxiosSecure";
 
-
-
 const AssignRider = () => {
   const axiosInstance = useAxiosSecure();
   const queryClient = useQueryClient();
@@ -14,7 +12,7 @@ const AssignRider = () => {
   const [selectedDistrict, setSelectedDistrict] = useState("");
 
   // Fetch all parcels that are paid and not collected
-  const { data: parcels = [] } = useQuery({
+  const { data: parcels = [], isLoading } = useQuery({
     queryKey: ["assignableParcels"],
     queryFn: async () => {
       const res = await axiosInstance.get(
@@ -38,15 +36,20 @@ const AssignRider = () => {
 
   // // Mutation: Assign rider to parcel
   const assignMutation = useMutation({
-    mutationFn: async ({ parcelId, riderId,email }) => {
+    mutationFn: async ({ parcelId, riderId, ridername, rider_email }) => {
       return axiosInstance.patch(`/parcels/assign/${parcelId}`, {
-        rider_id: riderId,
-        rider_email:email
+        riderId,
+        ridername,
+        rider_email,
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["assignableParcels"]);
-      setSelectedParcel(null); // close modal
+      setSelectedParcel(null);
+    },
+    onError: (error) => {
+      toast.error("Failed to assign rider");
+      console.error("Assign error:", error?.response || error);
     },
   });
 
@@ -54,8 +57,10 @@ const AssignRider = () => {
     setSelectedParcel(parcel);
     setSelectedDistrict(parcel.senderDistrict);
   };
-
-  const handleAssign = async (riderId, riderName,rider_email) => {
+  if (isLoading) {
+    return <p>Loading..</p>;
+  }
+  const handleAssign = async (riderId, riderName, rider_email) => {
     const confirm = await Swal.fire({
       title: "Confirm Assignment",
       text: `Are you sure you want to assign ${riderName} to this parcel?`,
@@ -71,7 +76,7 @@ const AssignRider = () => {
       await axiosInstance.patch(`/parcels/assign/${selectedParcel._id}`, {
         riderId,
         ridername: riderName,
-        rider_email:rider_email
+        rider_email: rider_email,
       });
 
       toast.success("Rider assigned successfully!");
@@ -163,7 +168,9 @@ const AssignRider = () => {
                       <button
                         className="btn btn-success btn-sm"
                         disabled={assignMutation.isPending}
-                        onClick={() => handleAssign(rider._id, rider.name,rider.email)}
+                        onClick={() =>
+                          handleAssign(rider._id, rider.name, rider.email)
+                        }
                       >
                         {assignMutation.isPending ? "Assigning..." : "Assign"}
                       </button>

@@ -8,13 +8,14 @@ import { Link } from "react-router";
 
 const PaymentForm = ({ id }) => {
   const parcel_id = id;
+  const [paid, setPaid] = useState(false);
   const [error, seterror] = useState("");
   const axiosInstance = useAxiosSecure();
   const stripe = useStripe();
   const elements = useElements();
   const { currentuser } = useContext(ValueContext);
 
-  const { data: parcelinfo = {},refetch } = useQuery({
+  const { data: parcelinfo = {}, refetch } = useQuery({
     queryKey: ["parcels", parcel_id],
     queryFn: async () => {
       const res = await axiosInstance.get(`/parcels/${parcel_id}`);
@@ -110,11 +111,13 @@ const PaymentForm = ({ id }) => {
             paidAt: new Date(result.paymentIntent.created * 1000).toISOString(),
           };
 
+          setPaid(true);
+          await refetch();
+
           axiosInstance
             .post("/payments", paymentInfo)
             .then((res) => console.log(res));
           Swal.fire("Success!", "Your payment was successful.", "success");
-          refetch();
         }
       }
     }
@@ -137,14 +140,14 @@ const PaymentForm = ({ id }) => {
 
         <button
           type="submit"
-          disabled={!stripe}
+          disabled={!stripe || paid || parcelinfo.payment_status === "paid"}
           className={
-            parcelinfo.payment_status === "paid"
+            paid || parcelinfo.payment_status === "paid"
               ? "btn btn-disabled btn-ghost"
               : "btn btn-success text-black"
           }
         >
-          {parcelinfo.payment_status === "paid"
+          {paid || parcelinfo.payment_status === "paid"
             ? "Already Paid"
             : `Pay ৳${parcelinfo.cost}`}
         </button>
