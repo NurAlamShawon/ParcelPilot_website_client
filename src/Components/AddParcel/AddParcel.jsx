@@ -4,13 +4,14 @@ import { toast } from "react-hot-toast";
 import Swal from "sweetalert2";
 import { ValueContext } from "../../Context/ValueContext";
 import Useaxios from "../../Hooks/Useaxios";
+import { useNavigate } from "react-router";
 
 const AddParcel = () => {
   const [regionsData, setregionsData] = useState([]);
   const [cost, setCost] = useState(null);
   const { currentuser } = useContext(ValueContext);
   const axiosInstance = Useaxios();
-
+  const navigate = useNavigate();
   const [senderDistricts, setSenderDistricts] = useState([]);
   const [receiverDistricts, setReceiverDistricts] = useState([]);
 
@@ -166,6 +167,7 @@ const AddParcel = () => {
         toast.success("Parcel submitted successfully!");
         reset();
         setCost(null);
+        navigate("/dashboard/myparcels");
       } else {
         toast("You can review and update the form.");
       }

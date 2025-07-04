@@ -5,7 +5,7 @@ const ThirdSection = () => {
   const [services, setServices] = useState([]);
 
   useEffect(() => {
-    fetch("../../../public/ThirdSectionCard.json")
+    fetch("/ThirdSectionCard.json")
       .then((res) => res.json())
       .then((data) => setServices(data))
       .catch((err) => console.error("Error loading services:", err));

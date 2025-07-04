@@ -3,7 +3,8 @@ import { ValueContext } from "../../Context/ValueContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router";
-import useAxiosSecure from "../../Hooks/UseaxiosSecure";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+
 
 
 
@@ -64,7 +65,7 @@ const Myparcels = () => {
 
 
 const onPay=id=>{
-navigate(`payment/${id}`);
+navigate(`/dashboard/payment/${id}`);
 }
 
 
@@ -75,6 +76,7 @@ navigate(`payment/${id}`);
     <thead className="bg-gray-100 text-gray-700">
       <tr>
         <th className="px-1.5 py-2 text-center">Title</th>
+        <th className="px-1.5 py-2 text-center">Tracking Id</th>
         <th className="px-1.5 py-2 text-center">Type</th>
         <th className="px-1.5 py-2 text-center">Payment</th>
         <th className="px-1.5 py-2 text-center">Cost (৳)</th>
@@ -86,6 +88,7 @@ navigate(`payment/${id}`);
       {parcels.map((parcel) => (
         <tr key={parcel._id} className="border-b">
           <td className="px-1.5 py-2 font-medium text-center">{parcel.title}</td>
+           <td className="px-1.5 py-2 font-medium text-center">{parcel.tracking_id}</td>
           <td className="px-1.5 py-2 capitalize text-center">{parcel.type}</td>
 
           {/* Payment Status Button */}

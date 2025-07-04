@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ValueContext } from "../../Context/ValueContext";
-import useAxiosSecure from "../../Hooks/UseaxiosSecure";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
 
 const MyCompletedDeliveries = () => {
   const { currentuser } = useContext(ValueContext);
@@ -38,6 +38,7 @@ const MyCompletedDeliveries = () => {
     mutationFn: async () => {
       const res = await axiosInstance.patch("/riders/cashout", {
         email: currentuser.email,
+         amount: rider.earnings,
       });
       return res.data;
     },

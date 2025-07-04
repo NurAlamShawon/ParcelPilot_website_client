@@ -44,7 +44,7 @@ const CustomerReview = () => {
   };
 
   return (
-    <div className="px-4">
+    <div className="px-2 xl:mx-0 ">
       <div className="space-y-5 max-w-3xl mx-auto text-center">
         <img
           src="https://i.postimg.cc/TPBVjgTY/live-tracking.png"
@@ -126,7 +126,7 @@ const CustomerReview = () => {
         <div className="flex justify-center items-center mt-6 space-x-4 absolute bottom-0 left-1/2 -translate-x-1/2">
           <button
             onClick={prevTestimonial}
-            className="w-8 h-8 rounded-full bg-gray-300 hover:bg-gray-400 text-white flex items-center justify-center transition"
+            className="w-8 h-8 rounded-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center transition"
           >
             ←
           </button>

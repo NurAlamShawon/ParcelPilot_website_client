@@ -5,7 +5,7 @@ const SecondSection = () => {
   const [features, setFeatures] = useState([]);
 
   useEffect(() => {
-    fetch("../../../public/SecondSectionCard.json")
+    fetch("/SecondSectionCard.json")
       .then((res) => res.json())
       .then((data) => setFeatures(data))
       .catch((err) => console.error("Error fetching features:", err));

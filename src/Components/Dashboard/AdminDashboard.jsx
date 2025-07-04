@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
-import useAxiosSecure from "../../Hooks/UseaxiosSecure";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+
 
 const AdminStats = () => {
   const [stats, setStats] = useState(null);
-  const axiosSecure = useAxiosSecure();
+  const axiosInstance = useAxiosSecure();
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axiosSecure.get("/admin/overview");
+        const res = await axiosInstance.get("/admin/overview");
         setStats(res.data);
       } catch (error) {
         console.error("Failed to fetch stats:", error);
       }
     };
     fetchStats();
-  }, [axiosSecure]);
+  }, [axiosInstance]);
 
   if (!stats) {
     return <p className="text-center mt-10">Loading stats...</p>;

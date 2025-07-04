@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
-import useAxiosSecure from "../../Hooks/UseaxiosSecure";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+
+
 
 const AssignRider = () => {
   const axiosInstance = useAxiosSecure();
@@ -66,7 +68,7 @@ const AssignRider = () => {
     if (!confirm.isConfirmed) return;
 
     try {
-      await axiosInstance.patch(`/parcels/${selectedParcel._id}/assign`, {
+      await axiosInstance.patch(`/parcels/assign/${selectedParcel._id}`, {
         riderId,
         ridername: riderName,
         rider_email:rider_email

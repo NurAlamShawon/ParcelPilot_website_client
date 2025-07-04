@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../Hooks/UseaxiosSecure";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+
 
 const PendingRider = () => {
   const axiosInstance = useAxiosSecure();

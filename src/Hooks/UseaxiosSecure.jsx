@@ -4,7 +4,7 @@ import { ValueContext } from "../Context/ValueContext";
 import { Navigate } from "react-router";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://parcel-pilot-website-server.vercel.app",
 });
 
 const useAxiosSecure = () => {

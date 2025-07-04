@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const Faq = () => {
   const [faq, setfaq] = useState([]);
+
   const [selectedIndex, setSelectedIndex] = useState(null);
 
   useEffect(() => {
@@ -25,23 +26,41 @@ const Faq = () => {
           with ease!
         </p>
       </div>
-      <div>
+      <div className="space-y-4">
         {faq.map((item, index) => {
+          const isOpen = selectedIndex === index;
+
           return (
             <div
               key={index}
-              className={`collapse collapse-arrow border border-base-300 cursor-pointer ${
-                selectedIndex === index
-                  ? "bg-[#E6F2F3] text-black"
-                  : "bg-base-100"
+              className={`border border-base-300 rounded transition-all duration-300 ${
+                isOpen ? "bg-[#E6F2F3] text-black" : "bg-base-100"
               }`}
-              onClick={() => setSelectedIndex(index)}
             >
-              <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title font-semibold">
-                {item.question}
-              </div>
-              <div className="collapse-content text-sm">{item.answer}</div>
+              <button
+                className="w-full text-left px-4 py-3 font-semibold flex justify-between items-center"
+                onClick={() => setSelectedIndex(isOpen ? null : index)}
+              >
+                <span>{item.question}</span>
+                <svg
+                  className={`w-4 h-4 transform transition-transform duration-300 ${
+                    isOpen ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {isOpen && <div className="px-4 pb-4 text-sm">{item.answer}</div>}
             </div>
           );
         })}

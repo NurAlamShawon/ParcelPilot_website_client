@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../Hooks/UseaxiosSecure";
+import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+
 
 const ActiveRider = () => {
   const axiosInstance = useAxiosSecure();

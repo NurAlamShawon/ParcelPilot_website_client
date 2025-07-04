@@ -4,6 +4,7 @@ import React, { useContext, useState } from "react";
 import { ValueContext } from "../../Context/ValueContext";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../Hooks/UseAxiosSecure";
+import { Link } from "react-router";
 
 const PaymentForm = ({ id }) => {
   const parcel_id = id;
@@ -13,7 +14,7 @@ const PaymentForm = ({ id }) => {
   const elements = useElements();
   const { currentuser } = useContext(ValueContext);
 
-  const { data: parcelinfo = {} } = useQuery({
+  const { data: parcelinfo = {},refetch } = useQuery({
     queryKey: ["parcels", parcel_id],
     queryFn: async () => {
       const res = await axiosInstance.get(`/parcels/${parcel_id}`);
@@ -29,18 +30,18 @@ const PaymentForm = ({ id }) => {
     event.preventDefault();
 
     const confirmation = await Swal.fire({
-    title: "Are you sure?",
-    text: `You are about to pay $${amount}. Do you want to continue?`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Proceed to Payment",
-    cancelButtonText: "Undo",
-  });
+      title: "Are you sure?",
+      text: `You are about to pay $${amount}. Do you want to continue?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Proceed to Payment",
+      cancelButtonText: "Undo",
+    });
 
-  // ❌ If user clicks 'Undo'
-  if (!confirmation.isConfirmed) {
-    return Swal.fire("Cancelled", "Payment was cancelled.", "info");
-  }
+    // ❌ If user clicks 'Undo'
+    if (!confirmation.isConfirmed) {
+      return Swal.fire("Cancelled", "Payment was cancelled.", "info");
+    }
 
     if (!stripe || !elements) {
       // Stripe.js has not loaded yet. Make sure to disable
@@ -109,38 +110,50 @@ const PaymentForm = ({ id }) => {
             paidAt: new Date(result.paymentIntent.created * 1000).toISOString(),
           };
 
-          axiosInstance.post('/payments',paymentInfo).then(res=> console.log(res));
-           Swal.fire("Success!", "Your payment was successful.", "success");
+          axiosInstance
+            .post("/payments", paymentInfo)
+            .then((res) => console.log(res));
+          Swal.fire("Success!", "Your payment was successful.", "success");
+          refetch();
         }
       }
     }
-
-
   };
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="max-w-3xl mx-auto mt-16 bg-white rounded-2xl shadow-xl p-10 space-y-8 border border-gray-200"
-    >
-      <div>
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
-          Complete Your Payment
-        </h2>
-        <label className="block text-lg font-medium text-gray-700 mb-3">
-          Card Details
-        </label>
-        <CardElement className="w-full p-5 bg-gray-100 border-2 border-gray-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-blue-400" />
-      </div>
-
-      <button
-        type="submit"
-        disabled={!stripe}
-        className="w-full py-4 text-xl font-bold btn btn-success disabled:opacity-50"
+    <div>
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-3xl mx-auto mt-16 bg-white rounded-2xl shadow-xl p-10 space-y-8 border border-gray-200"
       >
-        Pay ${parcelinfo.cost}
-      </button>
-      {error && <p className="text-red-600 text-center">{error.message}</p>}
-    </form>
+        <div>
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+            Complete Your Payment
+          </h2>
+          <label className="block text-lg font-medium text-gray-700 mb-3">
+            Card Details
+          </label>
+          <CardElement className="w-full p-5 bg-gray-100 border-2 border-gray-300 rounded-xl text-lg focus:outline-none focus:ring-4 focus:ring-blue-400" />
+        </div>
+
+        <button
+          type="submit"
+          disabled={!stripe}
+          className={
+            parcelinfo.payment_status === "paid"
+              ? "btn btn-disabled btn-ghost"
+              : "btn btn-success text-black"
+          }
+        >
+          {parcelinfo.payment_status === "paid"
+            ? "Already Paid"
+            : `Pay ৳${parcelinfo.cost}`}
+        </button>
+        {error && <p className="text-red-600 text-center">{error.message}</p>}
+        <Link to="/dashboard/myparcels">
+          <p className="text-black hover:underline cursor-poi">Skip for Now</p>
+        </Link>
+      </form>
+    </div>
   );
 };
 

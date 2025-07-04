@@ -4,7 +4,7 @@ const FifthSection = () => {
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    fetch("../../../public/FifthSectionCard.json")
+    fetch("/FifthSectionCard.json")
       .then((res) => res.json())
       .then((data) => setCards(data))
       .catch((err) => console.error("Error fetching cards:", err));
