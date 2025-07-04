@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../Hooks/UseAxiosSecure";
@@ -11,7 +11,6 @@ const AssignRider = () => {
   const [selectedParcel, setSelectedParcel] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState("");
 
-  // Fetch all parcels that are paid and not collected
   const { data: parcels = [], isLoading } = useQuery({
     queryKey: ["assignableParcels"],
     queryFn: async () => {
@@ -22,7 +21,6 @@ const AssignRider = () => {
     },
   });
 
-  // Fetch active riders in selected district (only when selectedParcel is open)
   const { data: riders = [], isLoading: ridersLoading } = useQuery({
     queryKey: ["activeRiders", selectedDistrict],
     queryFn: async () => {
@@ -34,36 +32,15 @@ const AssignRider = () => {
     enabled: !!selectedDistrict,
   });
 
-  // // Mutation: Assign rider to parcel
-  const assignMutation = useMutation({
-    mutationFn: async ({ parcelId, riderId, ridername, rider_email }) => {
-      return axiosInstance.patch(`/parcels/assign/${parcelId}`, {
-        riderId,
-        ridername,
-        rider_email,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["assignableParcels"]);
-      setSelectedParcel(null);
-    },
-    onError: (error) => {
-      toast.error("Failed to assign rider");
-      console.error("Assign error:", error?.response || error);
-    },
-  });
-
   const openAssignModal = (parcel) => {
     setSelectedParcel(parcel);
     setSelectedDistrict(parcel.senderDistrict);
   };
-  if (isLoading) {
-    return <p>Loading..</p>;
-  }
-  const handleAssign = async (riderId, riderName, rider_email) => {
+
+  const handleAssign = async (riderId, ridername, rider_email) => {
     const confirm = await Swal.fire({
       title: "Confirm Assignment",
-      text: `Are you sure you want to assign ${riderName} to this parcel?`,
+      text: `Are you sure you want to assign ${ridername} to this parcel?`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Yes, Assign",
@@ -72,12 +49,17 @@ const AssignRider = () => {
 
     if (!confirm.isConfirmed) return;
 
+    const riderinfo = {
+      riderId,
+      ridername,
+      rider_email,
+    };
+
     try {
-      await axiosInstance.patch(`/parcels/assign/${selectedParcel._id}`, {
-        riderId,
-        ridername: riderName,
-        rider_email: rider_email,
-      });
+      await axiosInstance.put(
+        `/parcels/assign/${selectedParcel._id}`,
+        riderinfo
+      );
 
       toast.success("Rider assigned successfully!");
       queryClient.invalidateQueries(["assignableParcels"]);
@@ -88,13 +70,16 @@ const AssignRider = () => {
     }
   };
 
+  if (isLoading) {
+    return <p>Loading..</p>;
+  }
+
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4 text-center">
         Assign Rider to Parcels
       </h2>
 
-      {/* Table for Desktop */}
       <div className="hidden lg:block overflow-x-auto">
         <table className="table w-full border">
           <thead className="bg-gray-100">
@@ -132,7 +117,6 @@ const AssignRider = () => {
         </table>
       </div>
 
-      {/* Modal */}
       {selectedParcel && (
         <>
           <input
@@ -167,12 +151,11 @@ const AssignRider = () => {
                       </div>
                       <button
                         className="btn btn-success btn-sm"
-                        disabled={assignMutation.isPending}
                         onClick={() =>
                           handleAssign(rider._id, rider.name, rider.email)
                         }
                       >
-                        {assignMutation.isPending ? "Assigning..." : "Assign"}
+                        Assign
                       </button>
                     </li>
                   ))}

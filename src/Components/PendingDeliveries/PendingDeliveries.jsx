@@ -4,9 +4,10 @@ import { ValueContext } from "../../Context/ValueContext";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../../Hooks/UseAxiosSecure";
 
+
 const PendingDeliveries = () => {
   const { currentuser } = useContext(ValueContext);
-  const axiosInstance = useAxiosSecure();
+  const axiosInstance = useAxiosSecure;
   const queryClient = useQueryClient();
 
   // Fetch all parcels assigned to rider
